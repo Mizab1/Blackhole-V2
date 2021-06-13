@@ -7,7 +7,7 @@ function load{
     # scoreboard players set $time_max bhcs_time 3
     scoreboard players set $cur_timer bhcs_time 3
     setblock -39 78 -101 air
-    setblock -39 78 -101 warped_wall_sign[facing=west]{Text1:'{"text":"[ Time ]","color":"yellow","bold":true}',Text3:'{"score":{"name":"$cur_timer","objective":"bhcs_time"},"color":"blue","bold":true}'} replace
+    setblock -39 78 -101 warped_wall_sign[facing=west]{Text1:'{"text":"[ Speed ]","color":"yellow","bold":true}',Text3:'{"score":{"name":"$cur_timer","objective":"bhcs_time"},"color":"blue","bold":true}'} replace
     scoreboard objectives add bhcs_time_tick dummy
 
     scoreboard objectives add bhcs_mode dummy
@@ -15,7 +15,7 @@ function load{
     scoreboard players set $cur_mode bhcs_mode 1
 
     scoreboard objectives add bhcs_color dummy
-    scoreboard players set $color_max bhcs_color 100006
+    scoreboard players set $color_max bhcs_color 100007
     scoreboard players set $cur_color bhcs_color 100001
 
     #> --- private 
@@ -94,6 +94,9 @@ dir modifiers{
                     execute(if score $cur_color bhcs_color matches 100006){
                         display -39 77 -103 Color Orange
                     }
+                    execute(if score $cur_color bhcs_color matches 100007){
+                        display -39 77 -103 Color White
+                    }
                 }
             }
         }
@@ -138,5 +141,10 @@ function summon_bh{
     }
 }
 
+
+# summon zombie ~ ~ ~ {DeathLootTable:"minecraft:bat",PersistenceRequired:1b,Tags:["alien"],CustomName:'{"text":"Alien"}'}
+# summon husk ~ ~ ~ {DeathLootTable:"minecraft:bat",PersistenceRequired:1b,Tags:["alien"],CustomName:'{"text":"Alien"}'}
+# give @p endermite_spawn_egg{display:{Name:'{"text":"Alien1"}'},EntityTag:{id:"minecraft:zombie",DeathLootTable:"minecraft:bat",PersistenceRequired:1b,Tags:["alien"],CustomName:'{"text":"Alien"}'}} 1
+# give @p endermite_spawn_egg{display:{Name:'{"text":"Alien2"}'},EntityTag:{id:"minecraft:husk",DeathLootTable:"minecraft:bat",PersistenceRequired:1b,Tags:["alien"],CustomName:'{"text":"Alien"}'}} 1
 
 # /give @p warped_sign{BlockEntityTag:{Text1:'{"text":"[ Mode ]","color":"yellow","bold":true}',Text3:'{"text":"Increase","color":"blue","bold":true,"clickEvent":{"action":"run_command","value":"/function custom_settings:modifiers/mode/increment"}}'}} 1

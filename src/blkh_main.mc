@@ -27,25 +27,30 @@ clock 1s{
     }
 }
 
+
+
 clock 10t{
     # AS/AT the block, Do a bit of maths to align it motion to the blackhole
-    execute as @e[type=falling_block, tag=blkh_block] at @s run{
-        execute store result score @s blkh_pos_x1 run data get entity @s Pos[0] 1000
-        execute store result score @s blkh_pos_y1 run data get entity @s Pos[1] 1000
-        execute store result score @s blkh_pos_z1 run data get entity @s Pos[2] 1000
-        tp @s[tag=blkh_new_block] ^ ^ ^0.2 facing entity @e[type=armor_stand, tag=blkh_blackhole, sort=nearest, limit=1]
-        # tag @s remove blkh_new_block
-        execute store result score @s blkh_pos_x2 run data get entity @s Pos[0] 1000
-        execute store result score @s blkh_pos_y2 run data get entity @s Pos[1] 1000
-        execute store result score @s blkh_pos_z2 run data get entity @s Pos[2] 1000
+    block{
+        name block_motion
+        execute as @e[type=falling_block, tag=blkh_block] at @s run{
+            execute store result score @s blkh_pos_x1 run data get entity @s Pos[0] 1000
+            execute store result score @s blkh_pos_y1 run data get entity @s Pos[1] 1000
+            execute store result score @s blkh_pos_z1 run data get entity @s Pos[2] 1000
+            tp @s[tag=blkh_new_block] ^ ^ ^0.1 facing entity @e[type=armor_stand, tag=blkh_blackhole, sort=nearest, limit=1]
+            # tag @s remove blkh_new_block
+            execute store result score @s blkh_pos_x2 run data get entity @s Pos[0] 1000
+            execute store result score @s blkh_pos_y2 run data get entity @s Pos[1] 1000
+            execute store result score @s blkh_pos_z2 run data get entity @s Pos[2] 1000
 
-        scoreboard players operation @s blkh_pos_x2 -= @s blkh_pos_x1
-        scoreboard players operation @s blkh_pos_y2 -= @s blkh_pos_y1
-        scoreboard players operation @s blkh_pos_z2 -= @s blkh_pos_z1
+            scoreboard players operation @s blkh_pos_x2 -= @s blkh_pos_x1
+            scoreboard players operation @s blkh_pos_y2 -= @s blkh_pos_y1
+            scoreboard players operation @s blkh_pos_z2 -= @s blkh_pos_z1
 
-        execute store result entity @s Motion[0] double 0.003 run scoreboard players get @s blkh_pos_x2
-        execute store result entity @s Motion[1] double 0.003 run scoreboard players get @s blkh_pos_y2
-        execute store result entity @s Motion[2] double 0.003 run scoreboard players get @s blkh_pos_z2
+            execute store result entity @s Motion[0] double 0.002 run scoreboard players get @s blkh_pos_x2
+            execute store result entity @s Motion[1] double 0.002 run scoreboard players get @s blkh_pos_y2
+            execute store result entity @s Motion[2] double 0.002 run scoreboard players get @s blkh_pos_z2
+        }
     }
 }
 
@@ -64,6 +69,7 @@ function load{
     scoreboard objectives add blkh_private dummy
 
     scoreboard players set $0 blkh_private 0
+    scoreboard players set $bh_msg blkh_private 0
 
     scoreboard objectives add coas_click used:carrot_on_a_stick
 }
@@ -109,6 +115,12 @@ function tick{
     execute as @e[type=arrow,nbt={inGround:1b}] at @s run{
         function custom_settings:summon_bh
         kill @s
+        execute if score $bh_msg blkh_private matches 0 run{
+            scoreboard players set $bh_msg blkh_private 1
+            schedule 5s append{
+                tellraw @a {"text":"Blackhole out of control! Evacuate quickly", "color":"red"}
+            }
+        }
     }
 
     # blackhole destroy
@@ -126,6 +138,24 @@ function tick{
             }
         }
 	}
+
+    # gun
+    # blackhole destroy
+	execute as @a[scores={coas_click=1..}, predicate=blkh_main:gun] at @s run{
+		scoreboard players set @s coas_click 0
+
+        block{
+            execute as @s at @s anchored eyes if block ~ ~ ~ #blkh_main:passable run{
+                particle dust 0.976 1.000 0.239 1 ^-1.2 ^-0.6 ^1.2 0.1 0.1 0.1 1 5 normal
+                execute if block ~ ~ ~ #blkh_main:passable unless entity @e[tag=alien, dx=0] positioned ^ ^ ^1 run function $block
+                execute if entity @e[tag=alien, dx=0] run{
+                    summon firework_rocket ~ ~ ~ {Life:1,LifeTime:1,FireworksItem:{id:firework_rocket,Count:1,tag:{Fireworks:{Explosions:[{Type:1,Trail:1b,Colors:[I;11515136,16761372]}]}}}}
+                }
+            }
+        }
+	}
+
+    effect give @a night_vision 50 1 true
 }
 
 
@@ -146,6 +176,16 @@ function test_block{
         LOOP(["minecraft:pink_terracotta","minecraft:pink_wool","minecraft:podzol","minecraft:polished_andesite","minecraft:polished_basalt","minecraft:polished_blackstone","minecraft:polished_blackstone_bricks","minecraft:polished_diorite","minecraft:polished_granite","minecraft:prismarine","minecraft:prismarine_bricks","minecraft:pumpkin","minecraft:purple_concrete","minecraft:purple_concrete_powder","minecraft:purple_glazed_terracotta","minecraft:purple_terracotta","minecraft:purple_wool","minecraft:purpur_block","minecraft:purpur_pillar","minecraft:quartz_block","minecraft:quartz_bricks","minecraft:quartz_pillar","minecraft:red_concrete","minecraft:red_concrete_powder","minecraft:red_glazed_terracotta","minecraft:red_mushroom_block","minecraft:red_nether_bricks","minecraft:red_sand","minecraft:red_sandstone","minecraft:red_terracotta","minecraft:red_wool","minecraft:redstone_block","minecraft:redstone_lamp","minecraft:redstone_ore","minecraft:repeating_command_block","minecraft:respawn_anchor","minecraft:sand","minecraft:sandstone","minecraft:shroomlight","minecraft:smithing_table","minecraft:smooth_quartz","minecraft:smooth_red_sandstone","minecraft:smooth_sandstone","minecraft:smooth_stone","minecraft:snow_block","minecraft:soul_soil","minecraft:sponge","minecraft:spruce_log","minecraft:spruce_planks","minecraft:spruce_wood","minecraft:stone","minecraft:stone_bricks","minecraft:stripped_acacia_log","minecraft:stripped_acacia_wood","minecraft:stripped_birch_log","minecraft:stripped_birch_wood","minecraft:stripped_crimson_hyphae","minecraft:stripped_crimson_stem","minecraft:stripped_dark_oak_log","minecraft:stripped_dark_oak_wood","minecraft:stripped_jungle_log","minecraft:stripped_jungle_wood","minecraft:stripped_oak_log","minecraft:stripped_oak_wood","minecraft:stripped_spruce_log","minecraft:stripped_spruce_wood","minecraft:stripped_warped_hyphae","minecraft:stripped_warped_stem","minecraft:structure_block","minecraft:target","minecraft:terracotta","minecraft:tube_coral_block","minecraft:warped_hyphae","minecraft:warped_nylium","minecraft:warped_planks","minecraft:warped_stem","minecraft:warped_wart_block","minecraft:wet_sponge","minecraft:white_concrete","minecraft:white_concrete_powder","minecraft:white_glazed_terracotta","minecraft:white_terracotta","minecraft:white_wool","minecraft:yellow_concrete","minecraft:yellow_concrete_powder","minecraft:yellow_glazed_terracotta","minecraft:yellow_terracotta","minecraft:yellow_wool"], i){
             execute if block ~ ~-2.5 ~ <%i%> run summon falling_block ~ ~2 ~ {BlockState:{Name:"<%i%>"},Time:300,Tags:["blkh_block","blkh_new_block"],NoGravity:1b}
         }
+    }
+
+    execute as @e[type=falling_block, tag=blkh_block] at @s run{
+        # data modify entity @s Motion[0] set value 0
+        # data modify entity @s Motion[1] set value 0
+        # data modify entity @s Motion[2] set value 0
+
+        execute store result entity @s Motion[0] double 1 run scoreboard players get $0 blkh_private
+        execute store result entity @s Motion[1] double 1 run scoreboard players get $0 blkh_private
+        execute store result entity @s Motion[2] double 1 run scoreboard players get $0 blkh_private
     }
 }
 
@@ -191,7 +231,7 @@ function help{
     tellraw @a {"text":"3. Now some important stuff, you have crafted the seed, what now? You can't just throw it to anyone's face and expect it to work, right? Well for that You can see the special blackhole gun and the ammo aside, take that gun and hold the seed on the off hand, now if you fire the gun, it will summon the blackhole, if you done it correctly.\n","color":"green"}
     tellraw @a {"text":"NOTE:","color":"red", "bold": true}
     tellraw @a {"text":"I know you did not fully read the top, if you didn't read it bro :p","color":"red"}
-    tellraw @a {"text":"1. Times are in seconds not minutes or ticks, so if you select 4, it will take 4 seconds to expand to the next step","color":"red"}
+    tellraw @a {"text":"1. Speed are in seconds not minutes or ticks, so if you select 4, it will take 4 seconds to expand to the next step","color":"red"}
     tellraw @a {"text":"2. Hold the seed on the left hand while shooting","color":"red"}
     tellraw @a {"text":"3. To summon the blackhole, use the blackhole gun and ammo","color":"red"}
 }
@@ -255,6 +295,19 @@ predicates blackhole_destroyer{
       "mainhand": {
         "item": "minecraft:carrot_on_a_stick",
         "nbt": "{CustomModelData:100100}"
+      }
+    }
+  }
+}
+
+predicates gun{
+	"condition": "minecraft:entity_properties",
+  "entity": "this",
+  "predicate": {
+    "equipment": {
+      "mainhand": {
+        "item": "minecraft:carrot_on_a_stick",
+        "nbt": "{CustomModelData:100101}"
       }
     }
   }

@@ -13,3 +13,5 @@ scoreboard players set #execute LANG_MC_INTERNAL 0
 execute if score $cur_color bhcs_color matches 100005 run function custom_settings:modifiers/color/__generated__/conditional/11
 scoreboard players set #execute LANG_MC_INTERNAL 0
 execute if score $cur_color bhcs_color matches 100006 run function custom_settings:modifiers/color/__generated__/conditional/12
+scoreboard players set #execute LANG_MC_INTERNAL 0
+execute if score $cur_color bhcs_color matches 100007 run function custom_settings:modifiers/color/__generated__/conditional/13

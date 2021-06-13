@@ -7,6 +7,6 @@ tellraw @a {"text":"2. Well good news is you can combine any attributes into a s
 tellraw @a {"text":"3. Now some important stuff, you have crafted the seed, what now? You can't just throw it to anyone's face and expect it to work, right? Well for that You can see the special blackhole gun and the ammo aside, take that gun and hold the seed on the off hand, now if you fire the gun, it will summon the blackhole, if you done it correctly.\n","color":"green"}
 tellraw @a {"text":"NOTE:","color":"red", "bold": true}
 tellraw @a {"text":"I know you did not fully read the top, if you didn't read it bro :p","color":"red"}
-tellraw @a {"text":"1. Times are in seconds not minutes or ticks, so if you select 4, it will take 4 seconds to expand to the next step","color":"red"}
+tellraw @a {"text":"1. Speed are in seconds not minutes or ticks, so if you select 4, it will take 4 seconds to expand to the next step","color":"red"}
 tellraw @a {"text":"2. Hold the seed on the left hand while shooting","color":"red"}
 tellraw @a {"text":"3. To summon the blackhole, use the blackhole gun and ammo","color":"red"}
