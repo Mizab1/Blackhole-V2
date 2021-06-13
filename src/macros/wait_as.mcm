@@ -1,0 +1,68 @@
+###
+Author: Ancientkingg
+Description: Basically /schedule but retains context for the entity.
+###
+
+#wait in <obj> as @e for 200t {}
+# <obj> is automatically added by the macro
+#there is no positional context so you need to add that manually
+macro wait{
+    tag $$3 add $$1
+    load{
+        scoreboard objectives add $$1 dummy
+    }
+    tick{
+        <%%
+            if (storage.tagCount == undefined) {
+                emit(`scoreboard players add @e[tag=$$1] $$1 1`);
+                storage.tagCount = 0;
+            }
+        %%>
+    }
+    #checks for the time needed to wait - supports multiple units such as tick, seconds and minutes, also errors out if no unit is provided
+    !IF("$$5".endsWith("t")){
+        schedule $$5 append{
+            <%%
+                storage.selector = "$$3".replace("s","e");
+                storage.time = ",scores={$$1=" + "$$5".substring(0,"$$5".length - 1) + ".." + "}";
+                if (!storage.selector.endsWith("]")){
+                    storage.selector += `[tag=$$1${storage.time}]`;
+                } else{
+                    storage.selector = storage.selector.substring(0, storage.selector.length - 1);
+                    storage.selector += `,tag=$$1${storage.time}]`;
+                }
+                emit(`execute as ${storage.selector} run function $$6\nscoreboard players set ${storage.selector} $$1 0\ntag ${storage.selector} remove $$1`)
+            %%>
+        }
+    }!IF("$$5".endsWith("s")){
+        schedule $$5 append{
+            <%%
+                storage.selector = "$$3".replace("s","e");
+                storage.time = ",scores={$$1=" + "$$5".substring(0,"$$5".length - 1) * 20 + ".." + "}";
+                if (!storage.selector.endsWith("]")){
+                    storage.selector += `[tag=$$1${storage.time}]`;
+                } else{
+                    storage.selector = storage.selector.substring(0, storage.selector.length - 1);
+                    storage.selector += `,tag=$$1${storage.time}]`;
+                }
+                emit(`execute as ${storage.selector} run function $$6\nscoreboard players set ${storage.selector} $$1 0\ntag ${storage.selector} remove $$1`)
+            %%>
+        }
+    }!IF("$$5".endsWith("m")){
+        schedule $$5 append{
+            <%%
+                storage.selector = "$$3".replace("s","e");
+                storage.time = ",scores={$$1=" + "$$5".substring(0,"$$5".length - 1) * 1200 + ".." + "}";
+                if (!storage.selector.endsWith("]")){
+                    storage.selector += `[tag=$$1${storage.time}]`;
+                } else{
+                    storage.selector = storage.selector.substring(0, storage.selector.length - 1);
+                    storage.selector += `,tag=$$1${storage.time}]`;
+                }
+                emit(`execute as ${storage.selector} run function $$6\nscoreboard players set ${storage.selector} $$1 0\ntag ${storage.selector} remove $$1`)
+            %%>
+        }
+    }!IF(!"$$5".endsWith("m")&&!"$$5".endsWith("s")&&!"$$5".endsWith("t")){
+        error [NO UNIT] Please provide a time unit to the delay (t|s|m)
+    }
+}

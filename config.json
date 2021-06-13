@@ -1,0 +1,14 @@
+{
+  "global": {
+    "onBuildSuccess": null
+  },
+  "mc": {
+    "dev": true,
+    "header": "# built using mc-build (https://github.com/mc-build/mc-build)\n# Datapack Made by Mizab",
+    "internalScoreboard": "LANG_MC_INTERNAL",
+    "rootNamespace": null
+  },
+  "mc-extra": {
+    "integrated": true
+  }
+}

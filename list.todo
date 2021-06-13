@@ -1,0 +1,7 @@
+actionplan:
+    1) Timer:
+    - Make a timer and make a dialer for it
+    - Suppose the player select 3 you store it in the timer as a fake player
+    - When the player click craft, spawn a arrow and place the fake player's timer to a tag on it
+    - When the player summons a blackhole make a instance of that unique blackhole in the scoreboard of static timer and set the value of it from the arrows
+    - Now set the ticking timer equaal to the static timer of that blackhole and decrement it each clock

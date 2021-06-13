@@ -1,0 +1,3 @@
+macro createObjective{
+    scoreboard objectives add $$0 $$1
+}

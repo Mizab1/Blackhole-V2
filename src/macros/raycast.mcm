@@ -1,0 +1,81 @@
+macro raycast{
+    # raycast entity <execution entity> <block to ignore> <taget entity> { <commands to run on success> }
+    # raycast block <execution entity> <block to ignore> <taget block> { <commands to run on success> } 
+    # raycast block_all <execution entity> <block to ignore> { <commands to run on success> } 
+    
+    !IF("$$0" === "entity"){
+        execute as $$1 at @s anchored eyes if block ~ ~ ~ $$2 run{
+            particle dust 0.976 1.000 0.239 1 ^-1.2 ^-0.6 ^1.2 0.2 0.2 0.2 1 100 normal
+            execute if block ~ ~ ~ $$2 unless entity $$3 positioned ^ ^ ^1 run function $top
+            execute if entity $$3 run{
+                function $$4
+            } 
+        }
+    }
+    !IF("$$0" === "block"){
+        execute as $$1 at @s anchored eyes if block ~ ~ ~ $$2 run{
+            execute if block ~ ~ ~ $$2 unless block ~ ~ ~ $$3 positioned ^ ^ ^1 run function $top
+            execute if block ~ ~ ~ $$3 run{
+                function $$4
+            }
+        }
+    }
+    !IF("$$0" === "block_all"){
+        execute as $$1 at @s anchored eyes positioned ^ ^ ^1 if block ~ ~ ~ $$2 run{
+            particle dust 0.976 1.000 0.239 1 ^-1.2 ^-0.6 ^1.2 0.2 0.2 0.2 1 100 normal
+            execute if block ~ ~ ~ $$2 unless entity @e[type=!player, dx=0] positioned ^ ^ ^1 run function $top
+            execute unless block ~ ~ ~ $$2 run{
+                function $$3
+            }
+        }
+    }
+    !IF("$$0" === "levitation"){
+        execute as $$1 at @s anchored eyes positioned ^ ^ ^1 if block ~ ~ ~ $$2 run{
+            #particle dust 1.000 0.976 0.961 1 ^-0.8 ^-0.6 ^1.2 0.2 0.2 0.2 1 20 normal
+            particle crit ~ ~ ~ 0 0 0 0 1 
+            playsound minecraft:entity.shulker.shoot ambient @a ~ ~ ~ 2 2
+            execute unless block ~ ~ ~ $$2 run{
+                function $$3
+            }
+            execute if entity @e[type=!player, dx=0] run{
+                function $$3
+            }
+            execute if block ~ ~ ~ $$2 positioned ^ ^ ^1 run function $top
+        }
+    }
+
+    !IF("$$0" === "freeze"){
+        execute as $$1 at @s anchored eyes positioned ^ ^ ^1 if block ~ ~ ~ $$2 run{
+            particle dust 1.000 0.498 0.212 1 ^-0.8 ^-0.6 ^1.2 0.04 0.04 0.04 1 10 normal
+            playsound minecraft:block.snow.place ambient @a ~ ~ ~ 2 1
+            execute unless block ~ ~ ~ $$2 run{
+                function $$3
+            }
+            execute if entity @e[type=!player, dx=0] run{
+                function $$3
+            }
+            execute if block ~ ~ ~ $$2 positioned ^ ^ ^1 run function $top
+        }
+    }
+
+    !IF("$$0" === "flame"){
+        execute as $$1 at @s anchored eyes positioned ^ ^ ^1 if block ~ ~ ~ $$2 run{
+            particle dust 0.976 1.000 0.239 1 ^-0.8 ^-0.6 ^1.2 0.2 0.2 0.2 1 100 normal
+            playsound minecraft:block.fire.ambient ambient @a ~ ~ ~ 0.5 2
+            execute if block ~ ~ ~ $$2 positioned ^ ^ ^1 run function $top
+            execute unless block ~ ~ ~ $$2 run{
+                function $$3
+            }
+        }
+    }
+
+    !IF("$$0" === "gold"){
+        execute as $$1 at @s anchored eyes positioned ^ ^ ^1 if block ~ ~ ~ $$2 run{
+            particle dust 1.000 1.000 0.161 1 ^-1.2 ^-0.6 ^1.2 0.2 0.2 0.2 1 20 normal
+            execute if block ~ ~ ~ $$2 positioned ^ ^ ^1 run function $top
+            execute unless block ~ ~ ~ $$2 run{
+                function $$3
+            }
+        }
+    }
+}

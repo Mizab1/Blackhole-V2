@@ -1,0 +1,8 @@
+###
+Syntax:
+display <coords> <main title> <sub type>
+###
+macro display{
+    setblock $$0 $$1 $$2 air
+    setblock $$0 $$1 $$2 warped_wall_sign[facing=west]{Text1:'{"text":"[ $$3 ]","color":"yellow","bold":true}',Text3:'{"text":"$$4","color":"blue","bold":true}'} replace
+}
