@@ -4,3 +4,4 @@
 execute store result entity @s Item.tag.Time int 1 run scoreboard players get $cur_timer bhcs_time
 execute store result entity @s Item.tag.Mode int 1 run scoreboard players get $cur_mode bhcs_mode
 execute store result entity @s Item.tag.Color int 1 run scoreboard players get $cur_color bhcs_color
+execute store result entity @s Item.tag.CustomModelData int 1 run scoreboard players get $cur_color bhcs_color

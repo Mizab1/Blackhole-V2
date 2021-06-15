@@ -11,12 +11,16 @@ function load{
     scoreboard objectives add bhcs_time_tick dummy
 
     scoreboard objectives add bhcs_mode dummy
-    scoreboard players set $mode_max bhcs_mode 3
+    scoreboard players set $mode_max bhcs_mode 6
     scoreboard players set $cur_mode bhcs_mode 1
 
     scoreboard objectives add bhcs_color dummy
     scoreboard players set $color_max bhcs_color 100007
     scoreboard players set $cur_color bhcs_color 100001
+
+    scoreboard objectives add bhcs_size dummy
+    scoreboard players set $size_max bhcs_size 100070
+    scoreboard players set $cur_size bhcs_size 10
 
     #> --- private 
     scoreboard objectives add bhcs_private dummy
@@ -31,13 +35,30 @@ dir modifiers{
         function increment{
             scoreboard players add $cur_timer bhcs_time 1
             setblock -39 78 -101 air
-            setblock -39 78 -101 warped_wall_sign[facing=west]{Text1:'{"text":"[ Time ]","color":"yellow","bold":true}',Text3:'{"score":{"name":"$cur_timer","objective":"bhcs_time"},"color":"blue","bold":true}'} replace
+            setblock -39 78 -101 warped_wall_sign[facing=west]{Text1:'{"text":"[ Speed ]","color":"yellow","bold":true}',Text3:'{"score":{"name":"$cur_timer","objective":"bhcs_time"},"color":"blue","bold":true}'} replace
         }
         function decrement{
             execute(if score $cur_timer bhcs_time > $min bhcs_private){
                 scoreboard players remove $cur_timer bhcs_time 1
                 setblock -39 78 -101 air
-                setblock -39 78 -101 warped_wall_sign[facing=west]{Text1:'{"text":"[ Time ]","color":"yellow","bold":true}',Text3:'{"score":{"name":"$cur_timer","objective":"bhcs_time"},"color":"blue","bold":true}'} replace
+                setblock -39 78 -101 warped_wall_sign[facing=west]{Text1:'{"text":"[ Speed ]","color":"yellow","bold":true}',Text3:'{"score":{"name":"$cur_timer","objective":"bhcs_time"},"color":"blue","bold":true}'} replace
+            }
+        }
+    }
+
+    dir size{
+        function increment{
+            execute(if score $cur_timer bhcs_time > $min bhcs_private){
+                scoreboard players add $cur_size bhcs_time 1
+                setblock -39 77 -101 air
+                setblock -39 77 -101 warped_wall_sign[facing=west]{Text1:'{"text":"[ Size ]","color":"yellow","bold":true}',Text3:'{"score":{"name":"$cur_timer","objective":"bhcs_time"},"color":"blue","bold":true}'} replace
+            }
+        }
+        function decrement{
+            execute(if score $cur_timer bhcs_time > $min bhcs_private){
+                scoreboard players remove $cur_timer bhcs_time 1
+                setblock -39 77 -101 air
+                setblock -39 77 -101 warped_wall_sign[facing=west]{Text1:'{"text":"[ Size ]","color":"yellow","bold":true}',Text3:'{"score":{"name":"$cur_timer","objective":"bhcs_time"},"color":"blue","bold":true}'} replace
             }
         }
     }
@@ -57,7 +78,16 @@ dir modifiers{
                         display -39 78 -105 Mode Block
                     }
                     execute(if score $cur_mode bhcs_mode matches 3){
-                        display -39 78 -105 Mode All
+                        display -39 78 -105 Mode Lava
+                    }
+                    execute(if score $cur_mode bhcs_mode matches 4){
+                        display -39 78 -105 Mode Water
+                    }
+                    execute(if score $cur_mode bhcs_mode matches 5){
+                        display -39 78 -105 Mode Inverted
+                    }
+                    execute(if score $cur_mode bhcs_mode matches 6){
+                        display -39 78 -105 Mode Heavy
                     }
                 }
             }
@@ -77,25 +107,25 @@ dir modifiers{
                 block{
                     name color_increment_display
                     execute(if score $cur_color bhcs_color matches 100001){
-                        display -39 77 -103 Color Black
+                        display -39 77 -105 Color Black
                     }
                     execute(if score $cur_color bhcs_color matches 100002){
-                        display -39 77 -103 Color Red
+                        display -39 77 -105 Color Red
                     }
                     execute(if score $cur_color bhcs_color matches 100003){
-                        display -39 77 -103 Color Blue
+                        display -39 77 -105 Color Blue
                     }
                     execute(if score $cur_color bhcs_color matches 100004){
-                        display -39 77 -103 Color Magenta
+                        display -39 77 -105 Color Magenta
                     }
                     execute(if score $cur_color bhcs_color matches 100005){
-                        display -39 77 -103 Color Lime
+                        display -39 77 -105 Color Lime
                     }
                     execute(if score $cur_color bhcs_color matches 100006){
-                        display -39 77 -103 Color Orange
+                        display -39 77 -105 Color Orange
                     }
                     execute(if score $cur_color bhcs_color matches 100007){
-                        display -39 77 -103 Color White
+                        display -39 77 -105 Color White
                     }
                 }
             }
@@ -115,6 +145,7 @@ function craft{
         execute store result entity @s Item.tag.Time int 1 run scoreboard players get $cur_timer bhcs_time
         execute store result entity @s Item.tag.Mode int 1 run scoreboard players get $cur_mode bhcs_mode
         execute store result entity @s Item.tag.Color int 1 run scoreboard players get $cur_color bhcs_color
+        execute store result entity @s Item.tag.CustomModelData int 1 run scoreboard players get $cur_color bhcs_color
     }
     block{
         name craft_particle
@@ -138,6 +169,7 @@ function summon_bh{
 
         execute as @s[predicate=blkh_main:mode_identify_2] at @s run function blkh_main:spawn
         execute as @s[predicate=blkh_main:mode_identify_3] at @s run function blkh_main:spawn
+        execute as @s[predicate=blkh_main:mode_identify_4] at @s run function blkh_main:spawn
     }
 }
 
@@ -146,5 +178,8 @@ function summon_bh{
 # summon husk ~ ~ ~ {DeathLootTable:"minecraft:bat",PersistenceRequired:1b,Tags:["alien"],CustomName:'{"text":"Alien"}'}
 # give @p endermite_spawn_egg{display:{Name:'{"text":"Alien1"}'},EntityTag:{id:"minecraft:zombie",DeathLootTable:"minecraft:bat",PersistenceRequired:1b,Tags:["alien"],CustomName:'{"text":"Alien"}'}} 1
 # give @p endermite_spawn_egg{display:{Name:'{"text":"Alien2"}'},EntityTag:{id:"minecraft:husk",DeathLootTable:"minecraft:bat",PersistenceRequired:1b,Tags:["alien"],CustomName:'{"text":"Alien"}'}} 1
+# give @p endermite_spawn_egg{display:{Name:'{"text":"Alien3"}'},EntityTag:{id:"minecraft:ravager",DeathLootTable:"minecraft:bat",PersistenceRequired:1b,Tags:["alien"],CustomName:'{"text":"Alien"}'}} 1
+# give @p endermite_spawn_egg{display:{Name:'{"text":"Alien4"}'},EntityTag:{id:"minecraft:phantom",DeathLootTable:"minecraft:bat",PersistenceRequired:1b,Tags:["alien"],CustomName:'{"text":"Alien"}'}} 1
+# summon minecraft:armor_stand ~ ~ ~ {Tags:["hive"], Invisible:1b, Marker:1b}
 
 # /give @p warped_sign{BlockEntityTag:{Text1:'{"text":"[ Mode ]","color":"yellow","bold":true}',Text3:'{"text":"Increase","color":"blue","bold":true,"clickEvent":{"action":"run_command","value":"/function custom_settings:modifiers/mode/increment"}}'}} 1

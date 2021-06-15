@@ -12,7 +12,10 @@
       "remote": {
         "type": "github",
         "owner": "mc-build"
-      }
+      },
+      "load_after": [
+        "lang-mc"
+      ]
     }
   ],
   "libs": []

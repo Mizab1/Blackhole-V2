@@ -1,10 +1,27 @@
 # built using mc-build (https://github.com/mc-build/mc-build)
 # Datapack Made by Mizab
 
-execute store result entity @s ArmorItems[3].tag.CustomModelData int 1 run data get entity @a[limit=1, sort=nearest] Inventory[{Slot:-106b}].tag.Color
-execute store result entity @s ArmorItems[3].tag.Mode int 1 run data get entity @a[limit=1, sort=nearest] Inventory[{Slot:-106b}].tag.Mode
-execute store result score @s bhcs_time run data get entity @a[limit=1, sort=nearest] Inventory[{Slot:-106b}].tag.Time
-scoreboard players operation @s bhcs_time_tick = @s bhcs_time
-tag @s add checked
-execute as @s[predicate=blkh_main:mode_identify_2] at @s run function blkh_main:spawn
-execute as @s[predicate=blkh_main:mode_identify_3] at @s run function blkh_main:spawn
+particle dust 0.906 1.000 0.071 1 ~0 ~ ~1 0 2 0 0 20 normal
+particle dust 0.169 0.808 1.000 1 ~0 ~ ~1 0 2 0 0 20 normal
+particle dust 0.906 1.000 0.071 1 ~0.8414709848078965 ~ ~0.5403023058681398 0 2 0 0 20 normal
+particle dust 0.169 0.808 1.000 1 ~0.8414709848078965 ~ ~0.5403023058681398 0 2 0 0 20 normal
+particle dust 0.906 1.000 0.071 1 ~0.9092974268256817 ~ ~-0.4161468365471424 0 2 0 0 20 normal
+particle dust 0.169 0.808 1.000 1 ~0.9092974268256817 ~ ~-0.4161468365471424 0 2 0 0 20 normal
+particle dust 0.906 1.000 0.071 1 ~0.1411200080598672 ~ ~-0.9899924966004454 0 2 0 0 20 normal
+particle dust 0.169 0.808 1.000 1 ~0.1411200080598672 ~ ~-0.9899924966004454 0 2 0 0 20 normal
+particle dust 0.906 1.000 0.071 1 ~-0.7568024953079282 ~ ~-0.6536436208636119 0 2 0 0 20 normal
+particle dust 0.169 0.808 1.000 1 ~-0.7568024953079282 ~ ~-0.6536436208636119 0 2 0 0 20 normal
+particle dust 0.906 1.000 0.071 1 ~-0.9589242746631385 ~ ~0.28366218546322625 0 2 0 0 20 normal
+particle dust 0.169 0.808 1.000 1 ~-0.9589242746631385 ~ ~0.28366218546322625 0 2 0 0 20 normal
+particle dust 0.906 1.000 0.071 1 ~-0.27941549819892586 ~ ~0.9601702866503661 0 2 0 0 20 normal
+particle dust 0.169 0.808 1.000 1 ~-0.27941549819892586 ~ ~0.9601702866503661 0 2 0 0 20 normal
+particle dust 0.906 1.000 0.071 1 ~0.6569865987187891 ~ ~0.7539022543433046 0 2 0 0 20 normal
+particle dust 0.169 0.808 1.000 1 ~0.6569865987187891 ~ ~0.7539022543433046 0 2 0 0 20 normal
+particle dust 0.906 1.000 0.071 1 ~0.9893582466233818 ~ ~-0.14550003380861354 0 2 0 0 20 normal
+particle dust 0.169 0.808 1.000 1 ~0.9893582466233818 ~ ~-0.14550003380861354 0 2 0 0 20 normal
+particle dust 0.906 1.000 0.071 1 ~0.4121184852417566 ~ ~-0.9111302618846769 0 2 0 0 20 normal
+particle dust 0.169 0.808 1.000 1 ~0.4121184852417566 ~ ~-0.9111302618846769 0 2 0 0 20 normal
+particle dust 0.906 1.000 0.071 1 ~-0.5440211108893698 ~ ~-0.8390715290764524 0 2 0 0 20 normal
+particle dust 0.169 0.808 1.000 1 ~-0.5440211108893698 ~ ~-0.8390715290764524 0 2 0 0 20 normal
+particle dust 0.906 1.000 0.071 1 ~-0.9999902065507035 ~ ~0.004425697988050785 0 2 0 0 20 normal
+particle dust 0.169 0.808 1.000 1 ~-0.9999902065507035 ~ ~0.004425697988050785 0 2 0 0 20 normal

@@ -10,7 +10,6 @@ clock 1s{
             scoreboard players operation @s bhcs_time_tick = @s bhcs_time
             execute as @s[predicate=blkh_main:mode_identify_2] at @s run{
                 block{
-                    name gravitified_block
                     # AS/AT the finder or the sphere around the blackhole
                     execute as @e[type=minecraft:armor_stand, tag=blkh_finder] at @s run{
                         function blkh_main:test_block
@@ -22,7 +21,25 @@ clock 1s{
                     }
                 }
             }
-            execute as @s[predicate=blkh_main:mode_identify_3] at @s run function blkh_main:gravitified_block
+            execute as @s[predicate=blkh_main:mode_identify_3] at @s run{
+                execute as @e[type=minecraft:armor_stand, tag=blkh_finder] at @s run{
+                    fill ~3 ~3 ~3 ~-3 ~-3 ~-3 lava
+                    tp ^ ^ ^-1
+                }
+            }
+            execute as @s[predicate=blkh_main:mode_identify_4] at @s run{
+                execute as @e[type=minecraft:armor_stand, tag=blkh_finder] at @s run{
+                    fill ~3 ~3 ~3 ~-3 ~-3 ~-3 water
+                    tp ^ ^ ^-1
+                }
+            }
+            execute as @s[predicate=blkh_main:mode_identify_5] at @s positioned ~-5 ~-5 ~-5 run{
+                LOOP(5, j){
+                    LOOP(["minecraft:black_concrete","minecraft:white_concrete","minecraft:gray_concrete","minecraft:cyan_concrete", "minecraft:brown_concrete", "minecraft:yellow_concrete", "minecraft:orange_concrete", "minecraft:blue_concrete"], i){
+                        summon falling_block ~<%Math.floor(Math.random() * 10) + 1%> ~<%Math.floor(Math.random() * 10) + 1%> ~<%Math.floor(Math.random() * 10) + 1%> {BlockState:{Name:"<%i%>"},Time:300,Tags:["blkh_inverted_block","blkh_block"],NoGravity:1b}
+                    }
+                }
+            }
         }
     }
 }
@@ -38,6 +55,7 @@ clock 10t{
             execute store result score @s blkh_pos_y1 run data get entity @s Pos[1] 1000
             execute store result score @s blkh_pos_z1 run data get entity @s Pos[2] 1000
             tp @s[tag=blkh_new_block] ^ ^ ^0.1 facing entity @e[type=armor_stand, tag=blkh_blackhole, sort=nearest, limit=1]
+            tp @s[tag=blkh_inverted_block] ^ ^ ^-0.1 facing entity @e[type=armor_stand, tag=blkh_blackhole, sort=nearest, limit=1]
             # tag @s remove blkh_new_block
             execute store result score @s blkh_pos_x2 run data get entity @s Pos[0] 1000
             execute store result score @s blkh_pos_y2 run data get entity @s Pos[1] 1000
@@ -71,6 +89,12 @@ function load{
     scoreboard players set $0 blkh_private 0
     scoreboard players set $bh_msg blkh_private 0
 
+    scoreboard objectives add stats dummy {"text": "STATS","color": "green"}
+    scoreboard objectives setdisplay sidebar stats
+    team add red
+    team modify red color red
+    team join red Aliens:
+
     scoreboard objectives add coas_click used:carrot_on_a_stick
 }
 
@@ -103,13 +127,9 @@ function tick{
             execute if entity @e[type=armor_stand, tag=blkh_blackhole, distance=..2] run kill @s
         }
     }
-    execute as @e[type=armor_stand, tag=blkh_blackhole, predicate=blkh_main:mode_identify_3] as @e[type=!#blkh_main:ignored_entities] at @s run{
+    execute as @e[type=armor_stand, tag=blkh_blackhole, predicate=blkh_main:mode_identify_6] as @e[type=!#blkh_main:ignored_entities_heavy] at @s run{
         function blkh_main:gravitified_entity
     }
-
-    # execute as @e[type=falling_block, tag=blkh_block, tag=blkh_new_block] at @s run{
-        
-    # }
 
     # Test bow
     execute as @e[type=arrow,nbt={inGround:1b}] at @s run{
@@ -154,6 +174,23 @@ function tick{
             }
         }
 	}
+
+    # glow enemy
+    execute as @a[scores={coas_click=1..}, predicate=blkh_main:glow] at @s run{
+		scoreboard players set @s coas_click 0
+        effect give @e[tag=alien] glowing 20 1 true
+	}
+
+    # Alien counter
+    scoreboard players set Aliens: stats 0
+    execute as @e[tag=alien] run scoreboard players add Aliens: stats 1
+
+    # Hive counter
+    scoreboard players set Hive: stats 0
+    execute as @e[tag=hive] run scoreboard players add Hive: stats 1
+
+    # Hive destroy
+    execute as @e[tag=hive] at @s if block ~ ~ ~ air run kill @s
 
     effect give @a night_vision 50 1 true
 }
@@ -244,11 +281,23 @@ entities ignored_entities{
     minecraft:item_frame
     minecraft:falling_block
     minecraft:arrow
+    minecraft:ravager
+}
+
+entities ignored_entities_heavy{
+    minecraft:player
+    minecraft:armor_stand
+    minecraft:item_frame
+    minecraft:falling_block
+    minecraft:arrow
 }
 
 blocks passable{
     minecraft:air
     minecraft:cave_air
+    minecraft:lava
+    minecraft:water
+    minecraft:fire
 }
 
 predicates mode_identify_1{
@@ -287,6 +336,42 @@ predicates mode_identify_3{
   }
 }
 
+predicates mode_identify_4{
+  "condition": "minecraft:entity_properties",
+  "entity": "this",
+  "predicate": {
+    "equipment": {
+      "head": {
+        "nbt": "{Mode:4}"
+      }
+    }
+  }
+}
+
+predicates mode_identify_5{
+  "condition": "minecraft:entity_properties",
+  "entity": "this",
+  "predicate": {
+    "equipment": {
+      "head": {
+        "nbt": "{Mode:5}"
+      }
+    }
+  }
+}
+
+predicates mode_identify_6{
+  "condition": "minecraft:entity_properties",
+  "entity": "this",
+  "predicate": {
+    "equipment": {
+      "head": {
+        "nbt": "{Mode:6}"
+      }
+    }
+  }
+}
+
 predicates blackhole_destroyer{
 	"condition": "minecraft:entity_properties",
   "entity": "this",
@@ -308,6 +393,19 @@ predicates gun{
       "mainhand": {
         "item": "minecraft:carrot_on_a_stick",
         "nbt": "{CustomModelData:100101}"
+      }
+    }
+  }
+}
+
+predicates glow{
+	"condition": "minecraft:entity_properties",
+  "entity": "this",
+  "predicate": {
+    "equipment": {
+      "mainhand": {
+        "item": "minecraft:carrot_on_a_stick",
+        "nbt": "{CustomModelData:100102}"
       }
     }
   }
