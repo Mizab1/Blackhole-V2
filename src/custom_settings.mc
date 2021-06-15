@@ -11,7 +11,7 @@ function load{
     scoreboard objectives add bhcs_time_tick dummy
 
     scoreboard objectives add bhcs_mode dummy
-    scoreboard players set $mode_max bhcs_mode 6
+    scoreboard players set $mode_max bhcs_mode 7
     scoreboard players set $cur_mode bhcs_mode 1
 
     scoreboard objectives add bhcs_color dummy
@@ -88,6 +88,9 @@ dir modifiers{
                     }
                     execute(if score $cur_mode bhcs_mode matches 6){
                         display -39 78 -105 Mode Heavy
+                    }
+                    execute(if score $cur_mode bhcs_mode matches 7){
+                        display -39 78 -105 Mode Life
                     }
                 }
             }
@@ -170,6 +173,8 @@ function summon_bh{
         execute as @s[predicate=blkh_main:mode_identify_2] at @s run function blkh_main:spawn
         execute as @s[predicate=blkh_main:mode_identify_3] at @s run function blkh_main:spawn
         execute as @s[predicate=blkh_main:mode_identify_4] at @s run function blkh_main:spawn
+        execute as @s[predicate=blkh_main:mode_identify_5] at @s run function blkh_main:spawn
+        execute as @s[predicate=blkh_main:mode_identify_7] at @s run function blkh_main:spawn
     }
 }
 

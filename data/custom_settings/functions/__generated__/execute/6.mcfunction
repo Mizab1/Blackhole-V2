@@ -9,3 +9,5 @@ tag @s add checked
 execute as @s[predicate=blkh_main:mode_identify_2] at @s run function blkh_main:spawn
 execute as @s[predicate=blkh_main:mode_identify_3] at @s run function blkh_main:spawn
 execute as @s[predicate=blkh_main:mode_identify_4] at @s run function blkh_main:spawn
+execute as @s[predicate=blkh_main:mode_identify_5] at @s run function blkh_main:spawn
+execute as @s[predicate=blkh_main:mode_identify_7] at @s run function blkh_main:spawn

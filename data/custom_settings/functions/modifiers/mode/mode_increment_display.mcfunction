@@ -13,3 +13,5 @@ scoreboard players set #execute LANG_MC_INTERNAL 0
 execute if score $cur_mode bhcs_mode matches 5 run function custom_settings:modifiers/mode/__generated__/conditional/8
 scoreboard players set #execute LANG_MC_INTERNAL 0
 execute if score $cur_mode bhcs_mode matches 6 run function custom_settings:modifiers/mode/__generated__/conditional/9
+scoreboard players set #execute LANG_MC_INTERNAL 0
+execute if score $cur_mode bhcs_mode matches 7 run function custom_settings:modifiers/mode/__generated__/conditional/10

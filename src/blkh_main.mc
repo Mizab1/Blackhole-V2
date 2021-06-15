@@ -23,7 +23,7 @@ clock 1s{
             }
             execute as @s[predicate=blkh_main:mode_identify_3] at @s run{
                 execute as @e[type=minecraft:armor_stand, tag=blkh_finder] at @s run{
-                    fill ~3 ~3 ~3 ~-3 ~-3 ~-3 lava
+                    fill ~3 ~3 ~3 ~-3 ~-3 ~-3 lava replace air
                     tp ^ ^ ^-1
                 }
             }
@@ -33,21 +33,37 @@ clock 1s{
                     tp ^ ^ ^-1
                 }
             }
-            execute as @s[predicate=blkh_main:mode_identify_5] at @s positioned ~-5 ~-5 ~-5 run{
-                LOOP(5, j){
-                    LOOP(["minecraft:black_concrete","minecraft:white_concrete","minecraft:gray_concrete","minecraft:cyan_concrete", "minecraft:brown_concrete", "minecraft:yellow_concrete", "minecraft:orange_concrete", "minecraft:blue_concrete"], i){
-                        summon falling_block ~<%Math.floor(Math.random() * 10) + 1%> ~<%Math.floor(Math.random() * 10) + 1%> ~<%Math.floor(Math.random() * 10) + 1%> {BlockState:{Name:"<%i%>"},Time:300,Tags:["blkh_inverted_block","blkh_block"],NoGravity:1b}
-                    }
+            execute as @s[predicate=blkh_main:mode_identify_5] at @s run{
+                execute as @e[type=minecraft:armor_stand, tag=blkh_finder] at @s run{
+                    fill ~3 ~3 ~3 ~-3 ~-3 ~-3 white_concrete
+                    tp ^ ^ ^-1
+                }
+            }
+            execute as @s[predicate=blkh_main:mode_identify_7] at @s run{
+                execute as @e[type=minecraft:armor_stand, tag=blkh_finder] at @s run{
+                    fill ~6 ~6 ~6 ~-6 ~-6 ~-6 coarse_dirt replace grass_block
+                    fill ~6 ~6 ~6 ~-6 ~-6 ~-6 air replace water
+                    kill @e[type=!#blkh_main:ignored_entities, distance=..10]
+                    tp ^ ^ ^-1
                 }
             }
         }
     }
 }
 
-
+clock 10s{
+    execute as @e[type=armor_stand, tag=hive] at @s positioned ~-10 ~2 ~-10 run{
+        LOOP(2, i){
+            summon zombie ~<%(Math.random()*7) + 6%> ~ ~<%(Math.random()*7) + 6%> {DeathLootTable:"minecraft:bat",Tags:["alien"],CustomName:'{"text":"Alien"}'}
+            summon husk ~<%(Math.random()*7) + 6%> ~ ~<%(Math.random()*7) + 6%> {DeathLootTable:"minecraft:bat",Tags:["alien"],CustomName:'{"text":"Alien"}'}
+            summon ravager ~<%(Math.random()*7) + 6%> ~ ~<%(Math.random()*7) + 6%> {DeathLootTable:"minecraft:bat",Tags:["alien"],CustomName:'{"text":"Alien"}'}
+            summon phantom ~<%(Math.random()*7) + 6%> ~ ~<%(Math.random()*7) + 6%> {DeathLootTable:"minecraft:bat",Tags:["alien"],CustomName:'{"text":"Alien"}'}
+        }
+    }
+}
 
 clock 10t{
-    # AS/AT the block, Do a bit of maths to align it motion to the blackhole
+    # AS/AT the block, Do a bit of maths to align its motion to the blackhole
     block{
         name block_motion
         execute as @e[type=falling_block, tag=blkh_block] at @s run{
@@ -55,7 +71,7 @@ clock 10t{
             execute store result score @s blkh_pos_y1 run data get entity @s Pos[1] 1000
             execute store result score @s blkh_pos_z1 run data get entity @s Pos[2] 1000
             tp @s[tag=blkh_new_block] ^ ^ ^0.1 facing entity @e[type=armor_stand, tag=blkh_blackhole, sort=nearest, limit=1]
-            tp @s[tag=blkh_inverted_block] ^ ^ ^-0.1 facing entity @e[type=armor_stand, tag=blkh_blackhole, sort=nearest, limit=1]
+            # tp @s[tag=blkh_inverted_block] ^ ^ ^-0.1 facing entity @e[type=armor_stand, tag=blkh_blackhole, sort=nearest, limit=1]
             # tag @s remove blkh_new_block
             execute store result score @s blkh_pos_x2 run data get entity @s Pos[0] 1000
             execute store result score @s blkh_pos_y2 run data get entity @s Pos[1] 1000
@@ -298,6 +314,7 @@ blocks passable{
     minecraft:lava
     minecraft:water
     minecraft:fire
+    minecraft:white_concrete
 }
 
 predicates mode_identify_1{
@@ -367,6 +384,18 @@ predicates mode_identify_6{
     "equipment": {
       "head": {
         "nbt": "{Mode:6}"
+      }
+    }
+  }
+}
+
+predicates mode_identify_7{
+  "condition": "minecraft:entity_properties",
+  "entity": "this",
+  "predicate": {
+    "equipment": {
+      "head": {
+        "nbt": "{Mode:7}"
       }
     }
   }
