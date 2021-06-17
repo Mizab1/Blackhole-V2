@@ -2,10 +2,6 @@
 # Datapack Made by Mizab
 
 execute as @a at @s run function blkh_main:__generated__/execute/24
-execute positioned -48 42 -68 if entity @a[distance=..20] run title @a actionbar {"text":"You have to use block hole to destroy the hives, and use entity hole to make way to the hive", "color":"yellow"}
-execute positioned 4 40 -59 if entity @a[distance=..20] run title @a actionbar {"text":"Use life hole to suck the leaves obstacles to reach the underground level", "color":"yellow"}
-execute positioned -73 38 9 if entity @a[distance=..20] run title @a actionbar {"text":"You have to cover all the crater with a lava hole", "color":"yellow"}
-execute positioned 350 44 -76 if entity @a[distance=..20] run title @a actionbar {"text":"Clear the lava to pass through it", "color":"yellow"}
 execute as @e[type=falling_block, tag=blkh_block] at @s if entity @e[type=armor_stand, tag=blkh_blackhole, distance=..2] run kill @s
 execute as @e[type=armor_stand, tag=blkh_blackhole] at @s run function blkh_main:__generated__/execute/32
 execute as @e[type=armor_stand, tag=blkh_blackhole, predicate=blkh_main:mode_identify_1] as @e[type=!#blkh_main:ignored_entities] at @s run function blkh_main:gravitified_entity
