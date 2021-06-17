@@ -14,5 +14,5 @@ scoreboard objectives add stats dummy {"text": "STATS","color": "green"}
 scoreboard objectives setdisplay sidebar stats
 team add red
 team modify red color red
-team join red Aliens:
+team join red Cave:
 scoreboard objectives add coas_click used:carrot_on_a_stick

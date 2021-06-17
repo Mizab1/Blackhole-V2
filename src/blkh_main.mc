@@ -13,7 +13,7 @@ clock 1s{
                     # AS/AT the finder or the sphere around the blackhole
                     execute as @e[type=minecraft:armor_stand, tag=blkh_finder] at @s run{
                         function blkh_main:test_block
-                        fill ~1 ~1 ~1 ~-1 ~-1 ~-1 air
+                        fill ~1 ~1 ~1 ~-1 ~-1 ~-1 air replace #aestd1:all_but_leaves
                         execute unless block ~ ~-2 ~ air run{
                             summon tnt ~ ~2 ~ {Fuse:0}
                         }
@@ -35,7 +35,7 @@ clock 1s{
             }
             execute as @s[predicate=blkh_main:mode_identify_5] at @s run{
                 execute as @e[type=minecraft:armor_stand, tag=blkh_finder] at @s run{
-                    fill ~3 ~3 ~3 ~-3 ~-3 ~-3 white_concrete
+                    fill ~3 ~3 ~3 ~-3 ~-3 ~-3 white_concrete replace air
                     tp ^ ^ ^-1
                 }
             }
@@ -43,6 +43,13 @@ clock 1s{
                 execute as @e[type=minecraft:armor_stand, tag=blkh_finder] at @s run{
                     fill ~6 ~6 ~6 ~-6 ~-6 ~-6 coarse_dirt replace grass_block
                     fill ~6 ~6 ~6 ~-6 ~-6 ~-6 air replace water
+                    fill ~6 ~6 ~6 ~-6 ~-6 ~-6 air replace oak_leaves 
+                    fill ~6 ~6 ~6 ~-6 ~-6 ~-6 air replace spruce_leaves 
+                    fill ~6 ~6 ~6 ~-6 ~-6 ~-6 air replace birch_leaves 
+                    fill ~6 ~6 ~6 ~-6 ~-6 ~-6 air replace dark_oak_leaves 
+                    fill ~6 ~6 ~6 ~-6 ~-6 ~-6 air replace jungle_leaves 
+                    fill ~6 ~6 ~6 ~-6 ~-6 ~-6 air replace acacia_leaves 
+                    particle soul ~ ~ ~ 6 6 6 0.1 50 normal
                     kill @e[type=!#blkh_main:ignored_entities, distance=..10]
                     tp ^ ^ ^-1
                 }
@@ -60,6 +67,15 @@ clock 10s{
             summon phantom ~<%(Math.random()*7) + 6%> ~ ~<%(Math.random()*7) + 6%> {DeathLootTable:"minecraft:bat",Tags:["alien"],CustomName:'{"text":"Alien"}'}
         }
     }
+
+	execute as @e[type=armor_stand, tag=cave] at @s positioned ~-10 ~2 ~-10 run{
+        LOOP(2, i){
+            summon zombie ~<%(Math.random()*7) + 6%> ~ ~<%(Math.random()*7) + 6%> {DeathLootTable:"minecraft:bat",Tags:["alien"],CustomName:'{"text":"Alien"}'}
+            summon husk ~<%(Math.random()*7) + 6%> ~ ~<%(Math.random()*7) + 6%> {DeathLootTable:"minecraft:bat",Tags:["alien"],CustomName:'{"text":"Alien"}'}
+            summon ravager ~<%(Math.random()*7) + 6%> ~ ~<%(Math.random()*7) + 6%> {DeathLootTable:"minecraft:bat",Tags:["alien"],CustomName:'{"text":"Alien"}'}
+            summon phantom ~<%(Math.random()*7) + 6%> ~ ~<%(Math.random()*7) + 6%> {DeathLootTable:"minecraft:bat",Tags:["alien"],CustomName:'{"text":"Alien"}'}
+        }
+    }
 }
 
 clock 10t{
@@ -70,7 +86,7 @@ clock 10t{
             execute store result score @s blkh_pos_x1 run data get entity @s Pos[0] 1000
             execute store result score @s blkh_pos_y1 run data get entity @s Pos[1] 1000
             execute store result score @s blkh_pos_z1 run data get entity @s Pos[2] 1000
-            tp @s[tag=blkh_new_block] ^ ^ ^0.1 facing entity @e[type=armor_stand, tag=blkh_blackhole, sort=nearest, limit=1]
+            tp @s[tag=blkh_new_block] ^ ^ ^0.1 facing entity @e[type=armor_stand, tag=blkh_blackhole, sort=nearest, limit=1, predicate=blkh_main:mode_identify_2]
             # tp @s[tag=blkh_inverted_block] ^ ^ ^-0.1 facing entity @e[type=armor_stand, tag=blkh_blackhole, sort=nearest, limit=1]
             # tag @s remove blkh_new_block
             execute store result score @s blkh_pos_x2 run data get entity @s Pos[0] 1000
@@ -109,12 +125,21 @@ function load{
     scoreboard objectives setdisplay sidebar stats
     team add red
     team modify red color red
-    team join red Aliens:
+    team join red Cave:
 
     scoreboard objectives add coas_click used:carrot_on_a_stick
 }
 
 function tick{
+    execute as @a at @s run{
+        execute if entity @e[type=armor_stand, tag=hive, distance=..30] run title @a actionbar {"text":"Use Blackhole to destroy the Hive", "color":"yellow"}
+        execute if entity @e[type=armor_stand, tag=cave, distance=..40] run title @a actionbar {"text":"Use Inverted Blackhole to Block the Tunnel", "color":"yellow"}
+    }
+
+    execute positioned -48 42 -68 if entity @a[distance=..20] run title @a actionbar {"text":"You have to use block hole to destroy the hives, and use entity hole to make way to the hive", "color":"yellow"}
+    execute positioned 4 40 -59 if entity @a[distance=..20] run title @a actionbar {"text":"Use life hole to suck the leaves obstacles to reach the underground level", "color":"yellow"}
+    execute positioned -73 38 9 if entity @a[distance=..20] run title @a actionbar {"text":"You have to cover all the crater with a lava hole", "color":"yellow"}
+    execute positioned 350 44 -76 if entity @a[distance=..20] run title @a actionbar {"text":"Clear the lava to pass through it", "color":"yellow"}
     # AS/AT the blocks which are made my blackhole, trigger if they are close to the blackhole and kill them to increase perfomance
     execute as @e[type=falling_block, tag=blkh_block] at @s if entity @e[type=armor_stand, tag=blkh_blackhole, distance=..2] run{
         kill @s
@@ -194,12 +219,17 @@ function tick{
     # glow enemy
     execute as @a[scores={coas_click=1..}, predicate=blkh_main:glow] at @s run{
 		scoreboard players set @s coas_click 0
-        effect give @e[tag=alien] glowing 20 1 true
+        # effect give @e[tag=alien] glowing 20 1 true
+        effect give @e[type=armor_stand, tag=hive] glowing 20 1 true
+        effect give @e[type=armor_stand, tag=cave] glowing 20 1 true
+        effect give @e[type=armor_stand, tag=glow] glowing 20 1 true
 	}
 
+	execute as @e[type=armor_stand, tag=cave] at @s if entity @e[type=armor_stand, tag=blkh_blackhole, predicate=blkh_main:mode_identify_5, distance=..30] run kill @s
+
     # Alien counter
-    scoreboard players set Aliens: stats 0
-    execute as @e[tag=alien] run scoreboard players add Aliens: stats 1
+    scoreboard players set Cave: stats 0
+    execute as @e[tag=cave] run scoreboard players add Cave: stats 1
 
     # Hive counter
     scoreboard players set Hive: stats 0
@@ -216,7 +246,7 @@ function tick{
 # "blkh_finder" is the tag of the armor stand
 function test_block{
     execute if block ~ ~-2.5 ~ #aestd1:opaque_1 run{
-        LOOP(["minecraft:acacia_log","minecraft:acacia_planks","minecraft:acacia_wood","minecraft:ancient_debris","minecraft:andesite","minecraft:barrel","minecraft:basalt","minecraft:bedrock","minecraft:beehive","minecraft:bee_nest","minecraft:birch_log","minecraft:birch_planks","minecraft:birch_wood","minecraft:black_concrete","minecraft:black_concrete_powder","minecraft:black_glazed_terracotta","minecraft:black_terracotta","minecraft:black_wool","minecraft:blackstone","minecraft:blue_concrete","minecraft:blue_concrete_powder","minecraft:blue_glazed_terracotta","minecraft:blue_ice","minecraft:blue_terracotta","minecraft:blue_wool","minecraft:bone_block","minecraft:bookshelf","minecraft:brain_coral_block","minecraft:bricks","minecraft:brown_concrete","minecraft:brown_concrete_powder","minecraft:brown_glazed_terracotta","minecraft:brown_mushroom_block","minecraft:brown_terracotta","minecraft:brown_wool","minecraft:bubble_coral_block","minecraft:cartography_table","minecraft:carved_pumpkin","minecraft:chain_command_block","minecraft:chiseled_nether_bricks","minecraft:chiseled_polished_blackstone","minecraft:chiseled_quartz_block","minecraft:chiseled_red_sandstone","minecraft:chiseled_sandstone","minecraft:chiseled_stone_bricks","minecraft:clay","minecraft:coal_block","minecraft:coal_ore","minecraft:coarse_dirt","minecraft:cobblestone","minecraft:command_block","minecraft:cracked_nether_bricks","minecraft:cracked_polished_blackstone_bricks","minecraft:cracked_stone_bricks","minecraft:crafting_table","minecraft:crimson_hyphae","minecraft:crimson_nylium","minecraft:crimson_planks","minecraft:crimson_stem","minecraft:crying_obsidian","minecraft:cut_red_sandstone","minecraft:cut_sandstone","minecraft:cyan_concrete","minecraft:cyan_concrete_powder","minecraft:cyan_glazed_terracotta","minecraft:cyan_terracotta","minecraft:cyan_wool","minecraft:dark_oak_log","minecraft:dark_oak_planks","minecraft:dark_oak_wood","minecraft:dark_prismarine","minecraft:dead_brain_coral_block","minecraft:dead_bubble_coral_block","minecraft:dead_fire_coral_block","minecraft:dead_horn_coral_block","minecraft:dead_tube_coral_block","minecraft:diamond_block","minecraft:diamond_ore","minecraft:diorite","minecraft:dirt","minecraft:dispenser","minecraft:dried_kelp_block","minecraft:dropper","minecraft:emerald_block","minecraft:emerald_ore","minecraft:end_gateway"], i){
+        LOOP(["minecraft:acacia_log","minecraft:acacia_planks","minecraft:acacia_wood","minecraft:ancient_debris","minecraft:andesite","minecraft:barrel","minecraft:basalt","minecraft:beehive","minecraft:bee_nest","minecraft:birch_log","minecraft:birch_planks","minecraft:birch_wood","minecraft:black_concrete","minecraft:black_concrete_powder","minecraft:black_glazed_terracotta","minecraft:black_terracotta","minecraft:black_wool","minecraft:blackstone","minecraft:blue_concrete","minecraft:blue_concrete_powder","minecraft:blue_glazed_terracotta","minecraft:blue_ice","minecraft:blue_terracotta","minecraft:blue_wool","minecraft:bone_block","minecraft:bookshelf","minecraft:brain_coral_block","minecraft:bricks","minecraft:brown_concrete","minecraft:brown_concrete_powder","minecraft:brown_glazed_terracotta","minecraft:brown_mushroom_block","minecraft:brown_terracotta","minecraft:brown_wool","minecraft:bubble_coral_block","minecraft:cartography_table","minecraft:carved_pumpkin","minecraft:chain_command_block","minecraft:chiseled_nether_bricks","minecraft:chiseled_polished_blackstone","minecraft:chiseled_quartz_block","minecraft:chiseled_red_sandstone","minecraft:chiseled_sandstone","minecraft:chiseled_stone_bricks","minecraft:clay","minecraft:coal_block","minecraft:coal_ore","minecraft:coarse_dirt","minecraft:cobblestone","minecraft:command_block","minecraft:cracked_nether_bricks","minecraft:cracked_polished_blackstone_bricks","minecraft:cracked_stone_bricks","minecraft:crafting_table","minecraft:crimson_hyphae","minecraft:crimson_nylium","minecraft:crimson_planks","minecraft:crimson_stem","minecraft:crying_obsidian","minecraft:cut_red_sandstone","minecraft:cut_sandstone","minecraft:cyan_concrete","minecraft:cyan_concrete_powder","minecraft:cyan_glazed_terracotta","minecraft:cyan_terracotta","minecraft:cyan_wool","minecraft:dark_oak_log","minecraft:dark_oak_planks","minecraft:dark_oak_wood","minecraft:dark_prismarine","minecraft:dead_brain_coral_block","minecraft:dead_bubble_coral_block","minecraft:dead_fire_coral_block","minecraft:dead_horn_coral_block","minecraft:dead_tube_coral_block","minecraft:diamond_block","minecraft:diamond_ore","minecraft:diorite","minecraft:dirt","minecraft:dispenser","minecraft:dried_kelp_block","minecraft:dropper","minecraft:emerald_block","minecraft:emerald_ore","minecraft:end_gateway"], i){
             execute if block ~ ~-2.5 ~ <%i%> run summon falling_block ~ ~2 ~ {BlockState:{Name:"<%i%>"},Time:300,Tags:["blkh_block","blkh_new_block"],NoGravity:1b}
         }
     }

@@ -162,7 +162,7 @@ function craft{
 }
 
 function summon_bh{
-    summon armor_stand ~ ~10 ~ {Marker:1b,Invisible:1b,Tags:["blkh_blackhole"],ArmorItems:[{},{},{},{id:"minecraft:wooden_hoe",Count:1b,tag:{CustomModelData:100001}}]}
+    summon armor_stand ~ ~6 ~ {Marker:1b,Invisible:1b,Tags:["blkh_blackhole"],ArmorItems:[{},{},{},{id:"minecraft:wooden_hoe",Count:1b,tag:{CustomModelData:100001}}]}
     execute as @e[type=armor_stand, tag=blkh_blackhole, tag=!checked] at @s run{
         execute store result entity @s ArmorItems[3].tag.CustomModelData int 1 run data get entity @a[limit=1, sort=nearest] Inventory[{Slot:-106b}].tag.Color
         execute store result entity @s ArmorItems[3].tag.Mode int 1 run data get entity @a[limit=1, sort=nearest] Inventory[{Slot:-106b}].tag.Mode
@@ -185,6 +185,7 @@ function summon_bh{
 # give @p endermite_spawn_egg{display:{Name:'{"text":"Alien2"}'},EntityTag:{id:"minecraft:husk",DeathLootTable:"minecraft:bat",PersistenceRequired:1b,Tags:["alien"],CustomName:'{"text":"Alien"}'}} 1
 # give @p endermite_spawn_egg{display:{Name:'{"text":"Alien3"}'},EntityTag:{id:"minecraft:ravager",DeathLootTable:"minecraft:bat",PersistenceRequired:1b,Tags:["alien"],CustomName:'{"text":"Alien"}'}} 1
 # give @p endermite_spawn_egg{display:{Name:'{"text":"Alien4"}'},EntityTag:{id:"minecraft:phantom",DeathLootTable:"minecraft:bat",PersistenceRequired:1b,Tags:["alien"],CustomName:'{"text":"Alien"}'}} 1
-# summon minecraft:armor_stand ~ ~ ~ {Tags:["hive"], Invisible:1b, Marker:1b}
-
+# summon minecraft:armor_stand ~ ~ ~ {Tags:["hive"], Invisible:1b}
+# summon minecraft:armor_stand ~ ~ ~ {Tags:["cave"], Invisible:1b}
+# summon minecraft:armor_stand ~ ~ ~ {Tags:["glow"], Invisible:1b}
 # /give @p warped_sign{BlockEntityTag:{Text1:'{"text":"[ Mode ]","color":"yellow","bold":true}',Text3:'{"text":"Increase","color":"blue","bold":true,"clickEvent":{"action":"run_command","value":"/function custom_settings:modifiers/mode/increment"}}'}} 1

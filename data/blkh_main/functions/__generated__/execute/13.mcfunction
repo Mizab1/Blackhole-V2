@@ -1,16 +1,11 @@
 # built using mc-build (https://github.com/mc-build/mc-build)
 # Datapack Made by Mizab
 
-execute store result score @s blkh_pos_x1 run data get entity @s Pos[0] 1000
-execute store result score @s blkh_pos_y1 run data get entity @s Pos[1] 1000
-execute store result score @s blkh_pos_z1 run data get entity @s Pos[2] 1000
-tp @s[tag=blkh_new_block] ^ ^ ^0.1 facing entity @e[type=armor_stand, tag=blkh_blackhole, sort=nearest, limit=1]
-execute store result score @s blkh_pos_x2 run data get entity @s Pos[0] 1000
-execute store result score @s blkh_pos_y2 run data get entity @s Pos[1] 1000
-execute store result score @s blkh_pos_z2 run data get entity @s Pos[2] 1000
-scoreboard players operation @s blkh_pos_x2 -= @s blkh_pos_x1
-scoreboard players operation @s blkh_pos_y2 -= @s blkh_pos_y1
-scoreboard players operation @s blkh_pos_z2 -= @s blkh_pos_z1
-execute store result entity @s Motion[0] double 0.002 run scoreboard players get @s blkh_pos_x2
-execute store result entity @s Motion[1] double 0.002 run scoreboard players get @s blkh_pos_y2
-execute store result entity @s Motion[2] double 0.002 run scoreboard players get @s blkh_pos_z2
+summon zombie ~6.281809788661119 ~ ~7.142387072734863 {DeathLootTable:"minecraft:bat",Tags:["alien"],CustomName:'{"text":"Alien"}'}
+summon husk ~12.178088464441828 ~ ~11.223669679244104 {DeathLootTable:"minecraft:bat",Tags:["alien"],CustomName:'{"text":"Alien"}'}
+summon ravager ~7.735913713750142 ~ ~6.855310803240855 {DeathLootTable:"minecraft:bat",Tags:["alien"],CustomName:'{"text":"Alien"}'}
+summon phantom ~9.22238222202003 ~ ~6.754074703597061 {DeathLootTable:"minecraft:bat",Tags:["alien"],CustomName:'{"text":"Alien"}'}
+summon zombie ~10.304733830510513 ~ ~9.67847037472453 {DeathLootTable:"minecraft:bat",Tags:["alien"],CustomName:'{"text":"Alien"}'}
+summon husk ~8.844638248505886 ~ ~7.411396508814576 {DeathLootTable:"minecraft:bat",Tags:["alien"],CustomName:'{"text":"Alien"}'}
+summon ravager ~8.576931495035097 ~ ~11.348833771272872 {DeathLootTable:"minecraft:bat",Tags:["alien"],CustomName:'{"text":"Alien"}'}
+summon phantom ~6.671067195085506 ~ ~10.09588756042084 {DeathLootTable:"minecraft:bat",Tags:["alien"],CustomName:'{"text":"Alien"}'}
