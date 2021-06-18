@@ -81,6 +81,11 @@ clock 10s{
             summon phantom ~<%Math.random() + 1%> ~ ~<%Math.random() + 1%> {DeathLootTable:"minecraft:bat",Tags:["alien"],CustomName:'{"text":"Alien"}'}
         }
     }
+	execute as @e[type=armor_stand, tag=ravager_spawner] at @s positioned ~-10 ~2 ~-10 run{
+        LOOP(2, i){
+            summon ravager ~<%Math.random() + 1%> ~ ~<%Math.random() + 1%> {DeathLootTable:"minecraft:bat",Tags:["alien"],CustomName:'{"text":"Alien"}'}
+        }
+    }
 }
 
 clock 10t{
@@ -158,6 +163,7 @@ function tick{
     }
 
     execute as @e[type=armor_stand, tag=phantom_spawn] at @s if block ~ ~1 ~ lava run kill @s
+    execute as @e[type=armor_stand, tag=ravager_spawner] at @s if entity @e[type=armor_stand, tag=blkh_blackhole, predicate=blkh_main:mode_identify_6, distance=..30] run kill @s
 
     # execute as @e[type=armor_stand, tag=glow] at @s if entity @a[distance=..20] run kill @s 
 
