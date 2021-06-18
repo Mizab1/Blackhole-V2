@@ -63,8 +63,8 @@ clock 10s{
         LOOP(2, i){
             summon zombie ~<%(Math.random()*7) + 6%> ~ ~<%(Math.random()*7) + 6%> {DeathLootTable:"minecraft:bat",Tags:["alien"],CustomName:'{"text":"Alien"}'}
             summon husk ~<%(Math.random()*7) + 6%> ~ ~<%(Math.random()*7) + 6%> {DeathLootTable:"minecraft:bat",Tags:["alien"],CustomName:'{"text":"Alien"}'}
-            summon ravager ~<%(Math.random()*7) + 6%> ~ ~<%(Math.random()*7) + 6%> {DeathLootTable:"minecraft:bat",Tags:["alien"],CustomName:'{"text":"Alien"}'}
-            summon phantom ~<%(Math.random()*7) + 6%> ~ ~<%(Math.random()*7) + 6%> {DeathLootTable:"minecraft:bat",Tags:["alien"],CustomName:'{"text":"Alien"}'}
+            # summon ravager ~<%(Math.random()*7) + 6%> ~ ~<%(Math.random()*7) + 6%> {DeathLootTable:"minecraft:bat",Tags:["alien"],CustomName:'{"text":"Alien"}'}
+            # summon phantom ~<%(Math.random()*7) + 6%> ~ ~<%(Math.random()*7) + 6%> {DeathLootTable:"minecraft:bat",Tags:["alien"],CustomName:'{"text":"Alien"}'}
         }
     }
 
@@ -72,8 +72,13 @@ clock 10s{
         LOOP(2, i){
             summon zombie ~<%(Math.random()*7) + 6%> ~ ~<%(Math.random()*7) + 6%> {DeathLootTable:"minecraft:bat",Tags:["alien"],CustomName:'{"text":"Alien"}'}
             summon husk ~<%(Math.random()*7) + 6%> ~ ~<%(Math.random()*7) + 6%> {DeathLootTable:"minecraft:bat",Tags:["alien"],CustomName:'{"text":"Alien"}'}
-            summon ravager ~<%(Math.random()*7) + 6%> ~ ~<%(Math.random()*7) + 6%> {DeathLootTable:"minecraft:bat",Tags:["alien"],CustomName:'{"text":"Alien"}'}
-            summon phantom ~<%(Math.random()*7) + 6%> ~ ~<%(Math.random()*7) + 6%> {DeathLootTable:"minecraft:bat",Tags:["alien"],CustomName:'{"text":"Alien"}'}
+            # summon ravager ~<%(Math.random()*7) + 6%> ~ ~<%(Math.random()*7) + 6%> {DeathLootTable:"minecraft:bat",Tags:["alien"],CustomName:'{"text":"Alien"}'}
+            # summon phantom ~<%(Math.random()*7) + 6%> ~ ~<%(Math.random()*7) + 6%> {DeathLootTable:"minecraft:bat",Tags:["alien"],CustomName:'{"text":"Alien"}'}
+        }
+    }
+	execute as @e[type=armor_stand, tag=phantom_spawn] at @s positioned ~-10 ~2 ~-10 run{
+        LOOP(2, i){
+            summon phantom ~<%Math.random() + 1%> ~ ~<%Math.random() + 1%> {DeathLootTable:"minecraft:bat",Tags:["alien"],CustomName:'{"text":"Alien"}'}
         }
     }
 }
@@ -151,6 +156,10 @@ function tick{
             tellraw @a {"text":"Clear the lava to pass through it", "color":"yellow"}
         } 
     }
+
+    execute as @e[type=armor_stand, tag=phantom_spawn] at @s if block ~ ~1 ~ lava run kill @s
+
+    # execute as @e[type=armor_stand, tag=glow] at @s if entity @a[distance=..20] run kill @s 
 
 
     # AS/AT the blocks which are made my blackhole, trigger if they are close to the blackhole and kill them to increase perfomance
