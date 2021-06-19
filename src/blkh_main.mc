@@ -1,4 +1,5 @@
 import ./macros/raycast.mcm
+import ./macros/internal_macros.mcm
 
 #> Clocks
 clock 1s{
@@ -11,7 +12,7 @@ clock 1s{
             execute as @s[predicate=blkh_main:mode_identify_2] at @s run{
                 block{
                     # AS/AT the finder or the sphere around the blackhole
-                    execute as @e[type=minecraft:armor_stand, tag=blkh_finder] at @s run{
+                    execute as @e[type=minecraft:armor_stand, tag=blkh_finder, tag=block] at @s run{
                         function blkh_main:test_block
                         fill ~1 ~1 ~1 ~-1 ~-1 ~-1 air replace #aestd1:all_but_leaves
                         execute unless block ~ ~-2 ~ air run{
@@ -22,25 +23,25 @@ clock 1s{
                 }
             }
             execute as @s[predicate=blkh_main:mode_identify_3] at @s run{
-                execute as @e[type=minecraft:armor_stand, tag=blkh_finder] at @s run{
+                execute as @e[type=minecraft:armor_stand, tag=blkh_finder, tag=lava] at @s run{
                     fill ~3 ~3 ~3 ~-3 ~-3 ~-3 lava replace air
                     tp ^ ^ ^-1
                 }
             }
             execute as @s[predicate=blkh_main:mode_identify_4] at @s run{
-                execute as @e[type=minecraft:armor_stand, tag=blkh_finder] at @s run{
+                execute as @e[type=minecraft:armor_stand, tag=blkh_finder, tag=water] at @s run{
                     fill ~3 ~3 ~3 ~-3 ~-3 ~-3 water
                     tp ^ ^ ^-1
                 }
             }
             execute as @s[predicate=blkh_main:mode_identify_5] at @s run{
-                execute as @e[type=minecraft:armor_stand, tag=blkh_finder] at @s run{
+                execute as @e[type=minecraft:armor_stand, tag=blkh_finder, tag=inverted] at @s run{
                     fill ~3 ~3 ~3 ~-3 ~-3 ~-3 white_concrete replace air
                     tp ^ ^ ^-1
                 }
             }
             execute as @s[predicate=blkh_main:mode_identify_7] at @s run{
-                execute as @e[type=minecraft:armor_stand, tag=blkh_finder] at @s run{
+                execute as @e[type=minecraft:armor_stand, tag=blkh_finder, tag=life] at @s run{
                     fill ~6 ~6 ~6 ~-6 ~-6 ~-6 coarse_dirt replace grass_block
                     fill ~6 ~6 ~6 ~-6 ~-6 ~-6 air replace water
                     fill ~6 ~6 ~6 ~-6 ~-6 ~-6 air replace oak_leaves 
@@ -187,17 +188,10 @@ function tick{
 
     # TP the mob toward the black hole
     execute as @e[type=armor_stand, tag=blkh_blackhole, predicate=blkh_main:mode_identify_1] as @e[type=!#blkh_main:ignored_entities] at @s run{
-        block{
-            name gravitified_entity
-            execute if entity @e[type=armor_stand, tag=blkh_blackhole, distance=..40] run{
-                effect give @s levitation 5 255 true
-                execute facing entity @e[type=armor_stand, tag=blkh_blackhole, sort= nearest, limit=1] eyes run tp @s ^0.1 ^ ^0.2
-            }
-            execute if entity @e[type=armor_stand, tag=blkh_blackhole, distance=..2] run kill @s
-        }
+        entity_suck blkh_main:mode_identify_1
     }
     execute as @e[type=armor_stand, tag=blkh_blackhole, predicate=blkh_main:mode_identify_6] as @e[type=!#blkh_main:ignored_entities_heavy] at @s run{
-        function blkh_main:gravitified_entity
+        entity_suck blkh_main:mode_identify_6
     }
 
     # Test bow
@@ -217,7 +211,7 @@ function tick{
 		scoreboard players set @s coas_click 0
 
         block{
-            execute as @s at @s anchored eyes if block ~ ~ ~ #blkh_main:passable run{
+            execute anchored eyes if block ~ ~ ~ #blkh_main:passable run{
                 particle dust 0.976 1.000 0.239 1 ^-1.2 ^-0.6 ^1.2 0.1 0.1 0.1 1 5 normal
                 execute if block ~ ~ ~ #blkh_main:passable unless entity @e[type=armor_stand, tag=blkh_blackhole, distance=..3] positioned ^ ^ ^1 run function $block
                 execute if entity @e[type=armor_stand, tag=blkh_blackhole, distance=..3] run{
@@ -229,7 +223,6 @@ function tick{
 	}
 
     # gun
-    # blackhole destroy
 	execute as @a[scores={coas_click=1..}, predicate=blkh_main:gun] at @s run{
 		scoreboard players set @s coas_click 0
 
@@ -297,33 +290,6 @@ function test_block{
         execute store result entity @s Motion[0] double 1 run scoreboard players get $0 blkh_private
         execute store result entity @s Motion[1] double 1 run scoreboard players get $0 blkh_private
         execute store result entity @s Motion[2] double 1 run scoreboard players get $0 blkh_private
-    }
-}
-
-#> Spawning and killing function
-# Spawn the Blackhole armor stand with the tag "blkh_blackhole" and summon the black void (obviously retextured block but I donno which one :p)
-function spawn{
-    
-
-    # Run the loop for summoning a circle around the blackhole
-    execute as @e[type=armor_stand, tag=blkh_blackhole] at @s run{
-        LOOP(4, i){
-            LOOP(20, j){
-                summon armor_stand ~<%Math.sin(j)*((i-4)*-1)%> ~<%i%> ~<%Math.cos(j)*((i-4)*-1)%> {Tags:["blkh_finder"], NoGravity:1b, Marker:1b, Invisible:1b}
-            }
-        }
-        LOOP(4, i){
-            LOOP(20, j){
-                summon armor_stand ~<%Math.sin(j)*(i+1)%> ~<%i-4%> ~<%Math.cos(j)*(i+1)%> {Tags:["blkh_finder"], NoGravity:1b, Marker:1b, Invisible:1b}
-            }
-        }
-        summon armor_stand ~ ~4 ~ {Tags:["blkh_finder"], NoGravity:1b, Marker:1b, Invisible:1b}
-        summon armor_stand ~ ~-5 ~ {Tags:["blkh_finder"], NoGravity:1b, Marker:1b, Invisible:1b}
-
-    }
-
-    execute as @e[type=armor_stand, tag=blkh_finder] at @s run{
-        tp @s ~ ~ ~ facing entity @e[limit=1, type=armor_stand, tag=blkh_blackhole]
     }
 }
 

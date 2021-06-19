@@ -3,4 +3,4 @@
 
 function custom_settings:summon_bh
 kill @s
-execute if score $bh_msg blkh_private matches 0 run function blkh_main:__generated__/execute/46
+execute if score $bh_msg blkh_private matches 0 run function blkh_main:__generated__/execute/40

@@ -1,7 +1,6 @@
 # built using mc-build (https://github.com/mc-build/mc-build)
 # Datapack Made by Mizab
 
-scoreboard players set @s coas_click 0
-effect give @e[type=armor_stand, tag=hive] glowing 20 1 true
-effect give @e[type=armor_stand, tag=cave] glowing 20 1 true
-effect give @e[type=armor_stand, tag=glow] glowing 20 1 true
+particle dust 0.976 1.000 0.239 1 ^-1.2 ^-0.6 ^1.2 0.1 0.1 0.1 1 5 normal
+execute if block ~ ~ ~ #blkh_main:passable unless entity @e[tag=alien, dx=0] positioned ^ ^ ^1 run function blkh_main:__generated__/execute/52
+execute if entity @e[tag=alien, dx=0] run summon firework_rocket ~ ~ ~ {Life:1,LifeTime:1,FireworksItem:{id:firework_rocket,Count:1,tag:{Fireworks:{Explosions:[{Type:1,Trail:1b,Colors:[I;11515136,16761372]}]}}}}

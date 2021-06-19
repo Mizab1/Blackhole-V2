@@ -1,7 +1,7 @@
 # built using mc-build (https://github.com/mc-build/mc-build)
 # Datapack Made by Mizab
 
-summon zombie ~8.171549176470437 ~ ~7.438026044302123 {DeathLootTable:"minecraft:bat",Tags:["alien"],CustomName:'{"text":"Alien"}'}
-summon husk ~6.8059408430158745 ~ ~9.323738717810912 {DeathLootTable:"minecraft:bat",Tags:["alien"],CustomName:'{"text":"Alien"}'}
-summon zombie ~12.09196664006477 ~ ~7.003019047616894 {DeathLootTable:"minecraft:bat",Tags:["alien"],CustomName:'{"text":"Alien"}'}
-summon husk ~9.691522649383044 ~ ~11.81328097101553 {DeathLootTable:"minecraft:bat",Tags:["alien"],CustomName:'{"text":"Alien"}'}
+summon zombie ~10.332306178365691 ~ ~7.920592228870862 {DeathLootTable:"minecraft:bat",Tags:["alien"],CustomName:'{"text":"Alien"}'}
+summon husk ~6.836718730541782 ~ ~6.982271715529238 {DeathLootTable:"minecraft:bat",Tags:["alien"],CustomName:'{"text":"Alien"}'}
+summon zombie ~11.180247485729819 ~ ~10.73937850195097 {DeathLootTable:"minecraft:bat",Tags:["alien"],CustomName:'{"text":"Alien"}'}
+summon husk ~9.639982829208144 ~ ~9.258761478420023 {DeathLootTable:"minecraft:bat",Tags:["alien"],CustomName:'{"text":"Alien"}'}

@@ -2,4 +2,4 @@
 # Datapack Made by Mizab
 
 scoreboard players set @s coas_click 0
-function blkh_main:__generated__/block/1
+function blkh_main:__generated__/block/2

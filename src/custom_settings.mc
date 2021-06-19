@@ -1,5 +1,5 @@
 # bhcs = blackhole custom settings
-import ./macros/display_type.mcm
+import ./macros/internal_macros.mcm
 
 function load{
     #> --- Modifiers
@@ -170,11 +170,11 @@ function summon_bh{
         scoreboard players operation @s bhcs_time_tick = @s bhcs_time
         tag @s add checked
 
-        execute as @s[predicate=blkh_main:mode_identify_2] at @s run function blkh_main:spawn
-        execute as @s[predicate=blkh_main:mode_identify_3] at @s run function blkh_main:spawn
-        execute as @s[predicate=blkh_main:mode_identify_4] at @s run function blkh_main:spawn
-        execute as @s[predicate=blkh_main:mode_identify_5] at @s run function blkh_main:spawn
-        execute as @s[predicate=blkh_main:mode_identify_7] at @s run function blkh_main:spawn
+        spawn_radius blkh_main:mode_identify_2 block
+        spawn_radius blkh_main:mode_identify_3 lava
+        spawn_radius blkh_main:mode_identify_4 water
+        spawn_radius blkh_main:mode_identify_5 inverted
+        spawn_radius blkh_main:mode_identify_7 life
     }
 }
 

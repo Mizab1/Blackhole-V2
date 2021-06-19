@@ -1,0 +1,48 @@
+###
+Syntax:
+display <coords> <main title> <sub type>
+###
+macro display{
+    setblock $$0 $$1 $$2 air
+    setblock $$0 $$1 $$2 warped_wall_sign[facing=west]{Text1:'{"text":"[ $$3 ]","color":"yellow","bold":true}',Text3:'{"text":"$$4","color":"blue","bold":true}'} replace
+}
+
+
+###
+Syntax: entity_suck <predicate>
+###
+macro entity_suck{
+    execute if entity @e[type=armor_stand, tag=blkh_blackhole, distance=..40] run{
+        effect give @s levitation 5 255 true
+        execute facing entity @e[type=armor_stand, tag=blkh_blackhole, sort= nearest, limit=1, predicate=$$0] eyes run tp @s ^0.1 ^ ^0.2
+    }
+    execute if entity @e[type=armor_stand, tag=blkh_blackhole, distance=..2] run kill @s
+}
+
+###
+spawn_radius <predicate> <AS_tag>
+###
+macro spawn_radius{
+    execute as @s[predicate=$$0] at @s run{
+        # Run the loop for summoning a circle around the blackhole
+        execute as @e[type=armor_stand, tag=blkh_blackhole] at @s run{
+            LOOP(4, i){
+                LOOP(20, j){
+                    summon armor_stand ~<%Math.sin(j)*((i-4)*-1)%> ~<%i%> ~<%Math.cos(j)*((i-4)*-1)%> {Tags:["blkh_finder","$$1"], NoGravity:1b, Marker:1b, Invisible:1b}
+                }
+            }
+            LOOP(4, i){
+                LOOP(20, j){
+                    summon armor_stand ~<%Math.sin(j)*(i+1)%> ~<%i-4%> ~<%Math.cos(j)*(i+1)%> {Tags:["blkh_finder","$$1"], NoGravity:1b, Marker:1b, Invisible:1b}
+                }
+            }
+            summon armor_stand ~ ~4 ~ {Tags:["blkh_finder","$$1"], NoGravity:1b, Marker:1b, Invisible:1b}
+            summon armor_stand ~ ~-5 ~ {Tags:["blkh_finder","$$1"], NoGravity:1b, Marker:1b, Invisible:1b}
+
+        }
+
+        execute as @e[type=armor_stand, tag=blkh_finder, tag=$$1] at @s run{
+            tp @s ~ ~ ~ facing entity @e[limit=1, type=armor_stand, tag=blkh_blackhole]
+        }
+    }
+}
