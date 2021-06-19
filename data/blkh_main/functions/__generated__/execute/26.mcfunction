@@ -7,3 +7,4 @@ execute positioned -48 42 -68 if entity @s[distance=..20, tag=!v_area1] run func
 execute positioned 4 40 -59 if entity @s[distance=..20, tag=!v_area2] run function blkh_main:__generated__/execute/30
 execute positioned -73 38 9 if entity @s[distance=..20, tag=!v_area3] run function blkh_main:__generated__/execute/31
 execute positioned 350 44 -76 if entity @s[distance=..20, tag=!v_area4] run function blkh_main:__generated__/execute/32
+execute positioned 6 14 -206 if entity @s[distance=..20, tag=!v_area5] run function blkh_main:__generated__/execute/33

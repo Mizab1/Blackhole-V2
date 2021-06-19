@@ -77,12 +77,12 @@ clock 10s{
             # summon phantom ~<%(Math.random()*7) + 6%> ~ ~<%(Math.random()*7) + 6%> {DeathLootTable:"minecraft:bat",Tags:["alien"],CustomName:'{"text":"Alien"}'}
         }
     }
-	execute as @e[type=armor_stand, tag=phantom_spawn] at @s positioned ~-10 ~2 ~-10 run{
+	execute as @e[type=armor_stand, tag=phantom_spawn] at @s positioned ~ ~ ~ run{
         LOOP(2, i){
-            summon phantom ~<%Math.random() + 1%> ~ ~<%Math.random() + 1%> {DeathLootTable:"minecraft:bat",Tags:["alien"],CustomName:'{"text":"Alien"}'}
+            summon phantom ~ ~2 ~ {DeathLootTable:"minecraft:bat",Tags:["alien"],CustomName:'{"text":"Alien"}'}
         }
     }
-	execute as @e[type=armor_stand, tag=ravager_spawner] at @s positioned ~-10 ~2 ~-10 run{
+	execute as @e[type=armor_stand, tag=ravager_spawner] at @s positioned ~ ~ ~ run{
         LOOP(2, i){
             summon ravager ~<%Math.random() + 1%> ~ ~<%Math.random() + 1%> {DeathLootTable:"minecraft:bat",Tags:["alien"],CustomName:'{"text":"Alien"}'}
         }
@@ -160,6 +160,10 @@ function tick{
         execute positioned 350 44 -76 if entity @s[distance=..20, tag=!v_area4] run{
             tag @s add v_area4
             tellraw @a {"text":"Clear the lava to pass through it", "color":"yellow"}
+        } 
+        execute positioned 6 14 -206 if entity @s[distance=..20, tag=!v_area5] run{
+            tag @s add v_area5
+            tellraw @a {"text":"Use the heavy blackhole to suck the big mobs", "color":"yellow"}
         } 
     }
 

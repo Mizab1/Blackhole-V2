@@ -188,4 +188,6 @@ function summon_bh{
 # summon minecraft:armor_stand ~ ~ ~ {Tags:["hive"], Invisible:1b}
 # summon minecraft:armor_stand ~ ~ ~ {Tags:["cave"], Invisible:1b}
 # summon minecraft:armor_stand ~ ~ ~ {Tags:["glow"], Invisible:1b}
+# summon minecraft:armor_stand ~ ~ ~ {Tags:["phantom_spawn"], Invisible:1b}
+# summon minecraft:armor_stand ~ ~ ~ {Tags:["ravager_spawner"], Invisible:1b}
 # /give @p warped_sign{BlockEntityTag:{Text1:'{"text":"[ Mode ]","color":"yellow","bold":true}',Text3:'{"text":"Increase","color":"blue","bold":true,"clickEvent":{"action":"run_command","value":"/function custom_settings:modifiers/mode/increment"}}'}} 1
