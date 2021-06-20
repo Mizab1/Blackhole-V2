@@ -50,6 +50,7 @@ clock 1s{
                     fill ~6 ~6 ~6 ~-6 ~-6 ~-6 air replace dark_oak_leaves 
                     fill ~6 ~6 ~6 ~-6 ~-6 ~-6 air replace jungle_leaves 
                     fill ~6 ~6 ~6 ~-6 ~-6 ~-6 air replace acacia_leaves 
+                    fill ~6 ~6 ~6 ~-6 ~-6 ~-6 cobblestone replace mossy_cobblestone  
                     particle soul ~ ~ ~ 6 6 6 0.1 50 normal
                     kill @e[type=!#blkh_main:ignored_entities, distance=..10]
                     tp ^ ^ ^-1
@@ -66,6 +67,14 @@ clock 10s{
             summon husk ~<%(Math.random()*7) + 6%> ~ ~<%(Math.random()*7) + 6%> {DeathLootTable:"minecraft:bat",Tags:["alien"],CustomName:'{"text":"Alien"}'}
             # summon ravager ~<%(Math.random()*7) + 6%> ~ ~<%(Math.random()*7) + 6%> {DeathLootTable:"minecraft:bat",Tags:["alien"],CustomName:'{"text":"Alien"}'}
             # summon phantom ~<%(Math.random()*7) + 6%> ~ ~<%(Math.random()*7) + 6%> {DeathLootTable:"minecraft:bat",Tags:["alien"],CustomName:'{"text":"Alien"}'}
+        }
+    }
+    execute as @e[type=armor_stand, tag=upgraded_hive] at @s positioned ~-10 ~2 ~-10 run{
+        LOOP(2, i){
+            # summon zombie ~<%(Math.random()*7) + 6%> ~ ~<%(Math.random()*7) + 6%> {DeathLootTable:"minecraft:bat",Tags:["alien"],CustomName:'{"text":"Alien"}'}
+            # summon husk ~<%(Math.random()*7) + 6%> ~ ~<%(Math.random()*7) + 6%> {DeathLootTable:"minecraft:bat",Tags:["alien"],CustomName:'{"text":"Alien"}'}
+            summon ravager ~<%(Math.random()*7) + 6%> ~ ~<%(Math.random()*7) + 6%> {DeathLootTable:"minecraft:bat",Tags:["alien"],CustomName:'{"text":"Alien"}'}
+            summon phantom ~<%(Math.random()*7) + 6%> ~ ~<%(Math.random()*7) + 6%> {DeathLootTable:"minecraft:bat",Tags:["alien"],CustomName:'{"text":"Alien"}'}
         }
     }
 
@@ -131,12 +140,13 @@ function load{
 
     scoreboard players set $0 blkh_private 0
     scoreboard players set $bh_msg blkh_private 0
+    scoreboard players set $destroyed blkh_private 0
 
     scoreboard objectives add stats dummy {"text": "STATS","color": "green"}
     scoreboard objectives setdisplay sidebar stats
     team add red
-    team modify red color red
-    team join red Cave:
+    team modify red color gold
+    team join red Objectives:
 
     scoreboard objectives add coas_click used:carrot_on_a_stick
 }
@@ -144,6 +154,7 @@ function load{
 function tick{
     execute as @a at @s run{
         execute if entity @e[type=armor_stand, tag=hive, distance=..30] run title @a actionbar {"text":"Use Blackhole to destroy the Hive", "color":"yellow"}
+        execute if entity @e[type=armor_stand, tag=cave, distance=..40] run title @a actionbar {"text":"Use Inverted Blackhole to Block the Tunnel", "color":"yellow"}
         execute if entity @e[type=armor_stand, tag=cave, distance=..40] run title @a actionbar {"text":"Use Inverted Blackhole to Block the Tunnel", "color":"yellow"}
         execute positioned -48 42 -68 if entity @s[distance=..20, tag=!v_area1] run{
             tag @s add v_area1
@@ -167,8 +178,33 @@ function tick{
         } 
     }
 
-    execute as @e[type=armor_stand, tag=phantom_spawn] at @s if block ~ ~1 ~ lava run kill @s
-    execute as @e[type=armor_stand, tag=ravager_spawner] at @s if entity @e[type=armor_stand, tag=blkh_blackhole, predicate=blkh_main:mode_identify_6, distance=..30] run kill @s
+    execute as @e[type=armor_stand, tag=phantom_spawn] at @s if block ~ ~1 ~ lava run{
+        scoreboard players add $destroyed blkh_private 1
+        kill @s
+        # 2
+    }
+    execute as @e[type=armor_stand, tag=ravager_spawner] at @s if entity @e[type=armor_stand, tag=blkh_blackhole, predicate=blkh_main:mode_identify_6, distance=..30] run{
+        scoreboard players add $destroyed blkh_private 1
+        kill @s
+        # 1
+    }
+	execute as @e[type=armor_stand, tag=cave] at @s if entity @e[type=armor_stand, tag=blkh_blackhole, predicate=blkh_main:mode_identify_5, distance=..30] run{
+        scoreboard players add $destroyed blkh_private 1
+        kill @s
+        # 1
+    }
+    # Hive destroy
+    execute as @e[tag=hive] at @s if block ~ ~ ~ air run{
+        scoreboard players add $destroyed blkh_private 1
+        kill @s
+        # 5
+    }
+
+    execute if score $destroyed blkh_private matches 9.. run{
+        scoreboard players set $destroyed blkh_private 0
+        title @a title {"text":"You have completed all the missions!", "color":"gold"}
+        tellraw @a {"text":"you killed all the aliens, now you can get fun destroying the abandonated mars base, you could try to experiment with more blackholes together, that would be useful for the science, and also would be funny", "color":"gold"}
+    }
 
     # execute as @e[type=armor_stand, tag=glow] at @s if entity @a[distance=..20] run kill @s 
 
@@ -250,18 +286,18 @@ function tick{
         effect give @e[type=armor_stand, tag=glow] glowing 20 1 true
 	}
 
-	execute as @e[type=armor_stand, tag=cave] at @s if entity @e[type=armor_stand, tag=blkh_blackhole, predicate=blkh_main:mode_identify_5, distance=..30] run kill @s
 
     # Alien counter
-    scoreboard players set Cave: stats 0
-    execute as @e[tag=cave] run scoreboard players add Cave: stats 1
+    scoreboard players set Objectives: stats 0
+    execute as @e[tag=cave] run scoreboard players add Objectives: stats 1
+    execute as @e[tag=hive] run scoreboard players add Objectives: stats 1
+    execute as @e[tag=ravager_spawner] run scoreboard players add Objectives: stats 1
+    execute as @e[tag=phantom_spawn] run scoreboard players add Objectives: stats 1
 
     # Hive counter
-    scoreboard players set Hive: stats 0
-    execute as @e[tag=hive] run scoreboard players add Hive: stats 1
+    # scoreboard players set Hive: stats 0
+    # execute as @e[tag=hive] run scoreboard players add Hive: stats 1
 
-    # Hive destroy
-    execute as @e[tag=hive] at @s if block ~ ~ ~ air run kill @s
 
     effect give @a night_vision 50 1 true
 }

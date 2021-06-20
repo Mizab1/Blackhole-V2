@@ -10,9 +10,10 @@ scoreboard objectives add blkh_pos_z2 dummy
 scoreboard objectives add blkh_private dummy
 scoreboard players set $0 blkh_private 0
 scoreboard players set $bh_msg blkh_private 0
+scoreboard players set $destroyed blkh_private 0
 scoreboard objectives add stats dummy {"text": "STATS","color": "green"}
 scoreboard objectives setdisplay sidebar stats
 team add red
-team modify red color red
-team join red Cave:
+team modify red color gold
+team join red Objectives:
 scoreboard objectives add coas_click used:carrot_on_a_stick
