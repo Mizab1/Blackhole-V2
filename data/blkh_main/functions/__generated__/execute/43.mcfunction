@@ -1,5 +1,5 @@
 # built using mc-build (https://github.com/mc-build/mc-build)
 # Datapack Made by Mizab
 
-execute if entity @e[type=armor_stand, tag=blkh_blackhole, distance=..40] run function blkh_main:__generated__/execute/44
-execute if entity @e[type=armor_stand, tag=blkh_blackhole, distance=..2] run kill @s
+effect give @s levitation 5 255 true
+execute facing entity @e[type=armor_stand, tag=blkh_blackhole, sort= nearest, limit=1, predicate=blkh_main:mode_identify_1] eyes run tp @s ^0.1 ^ ^0.2

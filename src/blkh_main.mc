@@ -155,7 +155,6 @@ function tick{
     execute as @a at @s run{
         execute if entity @e[type=armor_stand, tag=hive, distance=..30] run title @a actionbar {"text":"Use Blackhole to destroy the Hive", "color":"yellow"}
         execute if entity @e[type=armor_stand, tag=cave, distance=..40] run title @a actionbar {"text":"Use Inverted Blackhole to Block the Tunnel", "color":"yellow"}
-        execute if entity @e[type=armor_stand, tag=cave, distance=..40] run title @a actionbar {"text":"Use Inverted Blackhole to Block the Tunnel", "color":"yellow"}
         execute positioned -48 42 -68 if entity @s[distance=..20, tag=!v_area1] run{
             tag @s add v_area1
             tellraw @a {"text":"You have to use block hole to destroy the hives, and use entity hole to make way to the hive", "color":"yellow"}
