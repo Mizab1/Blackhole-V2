@@ -1,7 +1,7 @@
 # built using mc-build (https://github.com/mc-build/mc-build)
 # Datapack Made by Mizab
 
-summon ravager ~12.806130351211738 ~ ~6.895687525049179 {DeathLootTable:"minecraft:bat",Tags:["alien"],CustomName:'{"text":"Alien"}'}
-summon phantom ~8.622537101759058 ~ ~8.148514790505375 {DeathLootTable:"minecraft:bat",Tags:["alien"],CustomName:'{"text":"Alien"}'}
-summon ravager ~10.038178631959505 ~ ~10.885112172558586 {DeathLootTable:"minecraft:bat",Tags:["alien"],CustomName:'{"text":"Alien"}'}
-summon phantom ~6.996386307437051 ~ ~11.841043453214171 {DeathLootTable:"minecraft:bat",Tags:["alien"],CustomName:'{"text":"Alien"}'}
+summon ravager ~11.111550115958359 ~ ~11.347012693062652 {DeathLootTable:"minecraft:bat",Tags:["alien"],CustomName:'{"text":"Alien"}'}
+summon phantom ~9.237228680872912 ~ ~11.840977625524726 {DeathLootTable:"minecraft:bat",Tags:["alien"],CustomName:'{"text":"Alien"}'}
+summon ravager ~12.190445636986233 ~ ~6.691151652117177 {DeathLootTable:"minecraft:bat",Tags:["alien"],CustomName:'{"text":"Alien"}'}
+summon phantom ~9.497046426601768 ~ ~9.438555091471336 {DeathLootTable:"minecraft:bat",Tags:["alien"],CustomName:'{"text":"Alien"}'}

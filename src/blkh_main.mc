@@ -91,6 +91,11 @@ clock 10s{
             summon phantom ~ ~2 ~ {DeathLootTable:"minecraft:bat",Tags:["alien"],CustomName:'{"text":"Alien"}'}
         }
     }
+	execute as @e[type=armor_stand, tag=phantom_spawn_2] at @s positioned ~ ~ ~ run{
+        LOOP(2, i){
+            summon phantom ~ ~2 ~ {DeathLootTable:"minecraft:bat",Tags:["alien"],CustomName:'{"text":"Alien"}'}
+        }
+    }
 	execute as @e[type=armor_stand, tag=ravager_spawner] at @s positioned ~ ~ ~ run{
         LOOP(2, i){
             summon ravager ~<%Math.random() + 1%> ~ ~<%Math.random() + 1%> {DeathLootTable:"minecraft:bat",Tags:["alien"],CustomName:'{"text":"Alien"}'}
@@ -182,6 +187,11 @@ function tick{
         kill @s
         # 2
     }
+    execute as @e[type=armor_stand, tag=phantom_spawn_2] at @s if entity @e[type=armor_stand, tag=blkh_blackhole, predicate=blkh_main:mode_identify_5, distance=..30] run{
+        scoreboard players add $destroyed blkh_private 1
+        kill @s
+        # 2
+    }
     execute as @e[type=armor_stand, tag=ravager_spawner] at @s if entity @e[type=armor_stand, tag=blkh_blackhole, predicate=blkh_main:mode_identify_5, distance=..30] run{
         scoreboard players add $destroyed blkh_private 1
         kill @s
@@ -204,6 +214,13 @@ function tick{
         title @a title {"text":"You have completed all the missions!", "color":"gold"}
         tellraw @a {"text":"you killed all the aliens, now you can get fun destroying the abandonated mars base, you could try to experiment with more blackholes together, that would be useful for the science, and also would be funny", "color":"gold"}
     }
+    # Alien counter
+    scoreboard players set Objectives: stats 0
+    execute as @e[tag=cave] run scoreboard players add Objectives: stats 1
+    execute as @e[tag=hive] run scoreboard players add Objectives: stats 1
+    execute as @e[tag=ravager_spawner] run scoreboard players add Objectives: stats 1
+    execute as @e[tag=phantom_spawn] run scoreboard players add Objectives: stats 1
+    execute as @e[tag=phantom_spawn_2] run scoreboard players add Objectives: stats 1
 
     # execute as @e[type=armor_stand, tag=glow] at @s if entity @a[distance=..20] run kill @s 
 
@@ -284,16 +301,11 @@ function tick{
         effect give @e[type=armor_stand, tag=cave] glowing 20 1 true
         effect give @e[type=armor_stand, tag=ravager_spawner] glowing 20 1 true
         effect give @e[type=armor_stand, tag=phantom_spawn] glowing 20 1 true
+        effect give @e[type=armor_stand, tag=phantom_spawn_2] glowing 20 1 true
         # effect give @e[type=armor_stand, tag=glow] glowing 20 1 true
 	}
 
 
-    # Alien counter
-    scoreboard players set Objectives: stats 0
-    execute as @e[tag=cave] run scoreboard players add Objectives: stats 1
-    execute as @e[tag=hive] run scoreboard players add Objectives: stats 1
-    execute as @e[tag=ravager_spawner] run scoreboard players add Objectives: stats 1
-    execute as @e[tag=phantom_spawn] run scoreboard players add Objectives: stats 1
 
     # Hive counter
     # scoreboard players set Hive: stats 0
