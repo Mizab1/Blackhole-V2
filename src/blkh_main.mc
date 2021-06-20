@@ -182,7 +182,7 @@ function tick{
         kill @s
         # 2
     }
-    execute as @e[type=armor_stand, tag=ravager_spawner] at @s if entity @e[type=armor_stand, tag=blkh_blackhole, predicate=blkh_main:mode_identify_6, distance=..30] run{
+    execute as @e[type=armor_stand, tag=ravager_spawner] at @s if entity @e[type=armor_stand, tag=blkh_blackhole, predicate=blkh_main:mode_identify_5, distance=..30] run{
         scoreboard players add $destroyed blkh_private 1
         kill @s
         # 1

@@ -3,7 +3,7 @@
 
 execute as @a at @s run function blkh_main:__generated__/execute/27
 execute as @e[type=armor_stand, tag=phantom_spawn] at @s if block ~ ~1 ~ lava run function blkh_main:__generated__/execute/35
-execute as @e[type=armor_stand, tag=ravager_spawner] at @s if entity @e[type=armor_stand, tag=blkh_blackhole, predicate=blkh_main:mode_identify_6, distance=..30] run function blkh_main:__generated__/execute/36
+execute as @e[type=armor_stand, tag=ravager_spawner] at @s if entity @e[type=armor_stand, tag=blkh_blackhole, predicate=blkh_main:mode_identify_5, distance=..30] run function blkh_main:__generated__/execute/36
 execute as @e[type=armor_stand, tag=cave] at @s if entity @e[type=armor_stand, tag=blkh_blackhole, predicate=blkh_main:mode_identify_5, distance=..30] run function blkh_main:__generated__/execute/37
 execute as @e[tag=hive] at @s if block ~ ~ ~ air run function blkh_main:__generated__/execute/38
 execute if score $destroyed blkh_private matches 9.. run function blkh_main:__generated__/execute/39
